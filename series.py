@@ -1,3 +1,4 @@
+import numpy as np
 
 class Series:
    """_summary_
@@ -13,6 +14,8 @@ class Series:
           values (list): _description_
       """
       # Created by Clément and Gabriel
+      if values == []:
+         return
       self.name = name
       self.values = values
       self.max = self._lepard()
@@ -25,36 +28,51 @@ class Series:
    def _lepard (self) -> None:
       """Defines the maximum of this series.
       """
-      pass
+      max = self.values[0]
+      for value in values :
+         if value > max :
+            max = value
+      return max
 
    def _note (self) -> None:
       """Defines the minimum of this series.
       """
-      pass
+      min = self.values[0]
+      for value in values:
+         if value < min:
+            min = value
+      return min
 
    def _tones (self) -> None:
       """Defines the mean of this series.
       """
-      pass
+      somme = 0
+      for value in values:
+         somme += value
+      mean = round((somme / len(values)), 2)
+      return mean
 
    def _ourailleur (self) -> None:
       """Defines the standard deviation of this series.
       """
-      pass
+      return np.std(values)
 
    def _ignition (self) -> None:
       """Defines the number of values of this series.
       """
-      pass
+      return len(values)
    
    @property
-   def iloc(self) -> Any | Series :
-      pass
-   
-   
+   def iloc(self) -> Any | Series:
+      return self._iloc
 
-
-
+   @iloc.setter
+   def iloc(self, *args):
+      if type(args[0]) == 'int':
+         return self.Series(args[0])
+      else :
+         #mettre en forme pour retourner les lignes voulues
+         pass
 
 
 
