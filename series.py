@@ -1,4 +1,5 @@
 import numpy as np
+import statistics
 
 class Series:
    """_summary_
@@ -52,6 +53,7 @@ class Series:
       mean = round((somme / len(self.values)), 2)
       return mean
 
+
    def _ourailleur (self) -> None:
       """Defines the standard deviation of this series.
       """
@@ -63,59 +65,40 @@ class Series:
       return len(self.values)
 
    def print_series(self) -> None:
-      print(f'self.name = {self.name}')
-      print(f'self.values = {self.values}')
-      print(f'self.max = {self._lepard()}')
-      print(f'self.min = {self._note()}')
-      print(f'self.mean = {self._tones()}')
-      print(f'self.std = {self._ourailleur()}')
-      print(f'self.count = {self._ignition()}')
+      print(f'Nom = {self.name}')
+      print(f'Values = {self.values}')
+      print(f'Max = {self._lepard()}')
+      print(f'Min = {self._note()}')
+      print(f'Mean = {self._tones()}')
+      print(f'Ecart-type = {self._ourailleur()}')
+      print(f'Nombre = {self._ignition()}')
 
+   def operations(self):
+         return Series.print_series(self)
+
+#    a refaire au propre
    @property
-   def iloc(self) :
-      class IlocAccessor :
+   def iloc(self):
+      class IlocAccessor:
          def __init__(self, values):
             self.values = values
 
          def __getitem__(self, item):
-            if isinstance(item, int):
+            if type(item) == int:
                return self.values[item]
             elif type(item) == slice:
                start, stop, step = item.indices(len(self.values))
-               print(f"start = {start}")
-               print(f"stop = {stop}")
-               print(f"step = {step}")
-               if stop == len(self.values):
-                  return [self.values[i] for i in range(start, stop, step)]
-               else :
-                  return [self.values[i] for i in range(start, stop + 1, step)]
-            else :
+               if stop >= start:
+                  if stop == len(self.values):
+                     return [self.values[i] for i in range(start, stop, step)]
+                  else:
+                     return [self.values[i] for i in range(start, stop + 1, step)]
+               else:
+                  if stop < 0 :
+                     return [self.values[i] for i in range(start)]
+                  else :
+                     return [self.values[i] for i in range(stop, start+1, step)]
+            else:
                raise TypeError("Mauvais format dans iloc")
 
       return IlocAccessor(self.values)
-
-
-
-
-class DataFrame:
-   """The Dashboard receives data from a :ref:`Link`, and prints it on a new
-   popped window.
-
-   It can only display data coming from one block.
-   """
-
-   def __init__(self,
-                verbose: bool = False,
-                freq: float = 30) -> None:
-      """Sets the args and initializes parent class.
-
-      Args:
-         labels (:obj:`list`): Values to plot on the output window.
-         nb_digits (:obj:`int`, optional): Number of decimals to show.
-         verbose (:obj:`bool`, optional): Display loop frequency ?
-         freq (:obj:`float`, optional): If set, the block will loop at this
-            frequency.
-      """
-      super().__init__()
-      self.verbose = verbose
-      self.freq = freq
