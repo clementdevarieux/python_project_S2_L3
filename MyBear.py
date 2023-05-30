@@ -38,8 +38,11 @@ def main():
     # df_2 = df_test_series._std()
     # df_2.print_df()
     # df.print_df()
-    df = dataframe.read_csv("test_csv.csv")
+    df = dataframe.read_json("test_json.json")
+    # print(df)
+    # df = dataframe.read_csv("test_csv.csv")
     df.print_df()
+
 
 
 if __name__ == "__main__" :
