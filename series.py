@@ -73,10 +73,7 @@ class Series:
         print(f'Ecart-type = {self._ourailleur()}')
         print(f'Nombre = {self._ignition()}')
 
-    # def operations(self) ->None:
-    #     Series.print_series(self)
 
-    #    a refaire au propre
     @property
     def iloc(self):
         class IlocAccessor:

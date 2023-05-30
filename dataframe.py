@@ -1,20 +1,30 @@
 import series
+from typing import List, Any
 
 class DataFrame:
    """
    summary
    """
-   def __init__(self, column_names:list, values:list[list]) -> None:
+   def __init__(self, column_names: List, values: List[List[Any]]) -> None:
       self.series = []
       for i in range(len(column_names)):
          self.series.append(series.Series(column_names[i], values[i]))
+
+   def __init__(self, serie_list: List[series.Series]):
+      self.series = []
+      for serie in serie_list:
+         self.series.append(serie)
+
 
    def _max(self):
       name_list = []
       value_list = []
       for serie in self.series:
+         serie.print_series()
          name_list.append(serie.name)
          value_list.append([serie._lepard()])
+      print(name_list)
+      print(value_list)
       max_df = DataFrame(name_list, value_list)
       return max_df
 
