@@ -77,57 +77,45 @@ class DataFrame:
       count_df = DataFrame(name_list, value_list)
       return count_df
 
+   @property
    def iloc(self):
       # pour info, iloc[a, b] --> a sont les lignes, b les colonnes
-      class IlocAccessor:
+      class IlocAccessor():
          def __init__(self, values):
             self.values = values
-
          def __getitem__(self, item):
-            # cas de figure iloc[n, m]
-            # doit renvoyer un seul élément, de la colonne n et ligne m à mon avis
-            if type(item[0]) == int and type(item[1]) == int:
-               return self.values[item[0][1]] # corriger cela
+            print(item)
+            # if isinstance(item, tuple):
+            #    colonne, ligne = item
+            #    # cas de figure iloc[n, m]
+            #    # doit renvoyer un seul élément, de la colonne n et ligne m
+            #    if isinstance(colonne, int) and isinstance(ligne, int):
+            #       i = 0
+            #       for serie in self.series():
+            #          if i == colonne :
+            #             return self.serie.values[ligne]
+            #          i += 1
+            #
+            #    # C1 C2 C3
+            #    #  1  5  7
+            #    #  3  2  1
+            #    #  6  1  9
+            #
+            #    # cas de figure iloc[a:b, n]
+            #    # doit retourner une serie contenant les valeurs mentionnées
+            #    elif isinstance(colonne, slice) and isinstance(ligne, int):
+            #       return
+            #
+            #    # cas de figure iloc[n, a:b]
+            #    # doit retourner un dataframe qui contient une seule ligne et les valeurs mentionnées
+            #    elif isinstance(colonne, int) and isinstance(colonne, slice):
+            #       return
+            #
+            #    # cas de figure iloc[x:y, a:b]
+            #    # retourne un dataframe avec les lignes et les colonnes mentionnées
+            #    elif isinstance(colonne, slice) and isinstance(ligne, slice):
+            #       return
 
-            # cas de figure iloc[a:b, n]
-            # doit retourner une serie contenant les valeurs mentionnées
-            elif type(item[0]) == slice and type(item[1]) == int:
-               return
 
-            # cas de figure iloc[n, a:b]
-            # doit retourner un dataframe qui contient une seule ligne et les valeurs mentionnées
-            elif type(item[0]) == int and type(item[1]) == slice:
-               return
+      return IlocAccessor(self)
 
-            # cas de figure iloc[x:y, a:b]
-            # retourne un dataframe avec les lignes et les colonnes mentionnées
-            elif type(item[0]) == slice and type(item[1]) ==slice:
-               return
-
-
-      return IlocAccessor(self.values)
-
-   #
-   #
-   # # Charger un csv et le transformer en Dataframe
-   # def read_csv(path: str,
-   #              delimiter: str = ",") -> DataFrame:
-   #    pass
-   #
-   #
-   # # Charger un JSON et le transformer en DataFrame
-   # # les options possibles pour le champs orient sont :
-   # # records : [{column: value, ...}, ...] .
-   # # columns : {column1: [...], column2: [...], ...} .
-   # def read_json(path: str,
-   #               orient: str = "records") -> DataFrame:
-   #    if orient == "records":
-   #       pass
-   #    elif orient == "columns":
-   #       pass
-   #    else:
-   #       raise TypeError
-   #    pass
-   #
-   #
-   # Il faudra ensuite faire GROUP BY et JOIN, mais ça sera compliqué et long
