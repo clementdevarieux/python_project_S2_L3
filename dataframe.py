@@ -5,22 +5,30 @@ class DataFrame:
    """
    summary
    """
-   def __init__(self, column_names: List, values: List[List[Any]]) -> None:
-      self.series = []
-      for i in range(len(column_names)):
-         self.series.append(series.Series(column_names[i], values[i]))
+   # def __init__(self, column_names: List, values: List[List[Any]]) -> None:
+   #   self.series = []
+   #   for i in range(len(column_names)):
+   #      self.series.append(series.Series(column_names[i], values[i]))
+   #
+   # def __init__(self, serie_list: List[series.Series]):
+   #    self.series = serie_list
 
-   def __init__(self, serie_list: List[series.Series]):
+
+   def __init__(self, column_names: List[str] = None, values: List[List[Any]] = None, serie_list: List[series.Series] = None):
       self.series = []
-      for serie in serie_list:
-         self.series.append(serie)
+      if serie_list is not None:
+         self.series = serie_list
+      elif column_names is not None and values is not None:
+         for i in range(len(column_names)):
+            self.series.append(series.Series(column_names[i], values[i]))
+      else :
+         raise ValueError("invalid")
 
 
    def _max(self):
       name_list = []
       value_list = []
       for serie in self.series:
-         serie.print_series()
          name_list.append(serie.name)
          value_list.append([serie._lepard()])
       print(name_list)
@@ -69,43 +77,36 @@ class DataFrame:
       count_df = DataFrame(name_list, value_list)
       return count_df
 
-   # # à implémenter
-   # #doit renvoyer les max, min, etc...
-   # # ne marche pas de toute évidence
-   # def operate(self, new):
-   #    self.new = series.operations()
-   #    return self.new
-   #
-   # # à implémenter
-   # def iloc(self):
-   #    # pour info, iloc[a, b] --> a sont les lignes, b les colonnes
-   #    class IlocAccessor:
-   #       def __init__(self, values):
-   #          self.values = values
-   #
-   #       def __getitem__(self, item):
-   #          # cas de figure iloc[n, m]
-   #          # doit renvoyer un seul élément, de la colonne n et ligne m à mon avis
-   #          if type(item[0]) == int and type(item[1]) == int:
-   #             return self.values[item[0][1]] # corriger cela
-   #
-   #          # cas de figure iloc[a:b, n]
-   #          # doit retourner une serie contenant les valeurs mentionnées
-   #          elif type(item[0]) == slice and type(item[1]) == int:
-   #             return
-   #
-   #          # cas de figure iloc[n, a:b]
-   #          # doit retourner un dataframe qui contient une seule ligne et les valeurs mentionnées
-   #          elif type(item[0]) == int and type(item[1]) == slice:
-   #             return
-   #
-   #          # cas de figure iloc[x:y, a:b]
-   #          # retourne un dataframe avec les lignes et les colonnes mentionnées
-   #          elif type(item[0]) == slice and type(item[1]) ==slice:
-   #             return
-   #
-   #
-   #    return IlocAccessor(self.values)
+   def iloc(self):
+      # pour info, iloc[a, b] --> a sont les lignes, b les colonnes
+      class IlocAccessor:
+         def __init__(self, values):
+            self.values = values
+
+         def __getitem__(self, item):
+            # cas de figure iloc[n, m]
+            # doit renvoyer un seul élément, de la colonne n et ligne m à mon avis
+            if type(item[0]) == int and type(item[1]) == int:
+               return self.values[item[0][1]] # corriger cela
+
+            # cas de figure iloc[a:b, n]
+            # doit retourner une serie contenant les valeurs mentionnées
+            elif type(item[0]) == slice and type(item[1]) == int:
+               return
+
+            # cas de figure iloc[n, a:b]
+            # doit retourner un dataframe qui contient une seule ligne et les valeurs mentionnées
+            elif type(item[0]) == int and type(item[1]) == slice:
+               return
+
+            # cas de figure iloc[x:y, a:b]
+            # retourne un dataframe avec les lignes et les colonnes mentionnées
+            elif type(item[0]) == slice and type(item[1]) ==slice:
+               return
+
+
+      return IlocAccessor(self.values)
+
    #
    #
    # # Charger un csv et le transformer en Dataframe
