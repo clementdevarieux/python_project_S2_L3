@@ -30,39 +30,55 @@ class Series:
     def _lepard(self) -> None:
         """Defines the maximum of this series.
       """
-        max = self.values[0]
-        for value in self.values:
-            if value > max:
-                max = value
+        try:
+            max = self.values[0]
+            for value in self.values:
+                if int(value) > max:
+                    max = value
+        except:
+            return None
+
         return max
 
     def _note(self) -> None:
         """Defines the minimum of this series.
       """
-        min = self.values[0]
-        for value in self.values:
-            if value < min:
-                min = value
+        try:
+            min = self.values[0]
+            for value in self.values:
+                if int(value) < min:
+                    min = value
+        except:
+            return None
         return min
 
     def _tones(self) -> None:
         """Defines the mean of this series.
       """
-        somme = 0
-        for value in self.values:
-            somme += value
-        mean = round((somme / len(self.values)), 2)
+        try:
+            somme = 0
+            for value in self.values:
+                somme += int(value)
+            mean = round((somme / len(self.values)), 2)
+        except:
+            return None
         return mean
 
     def _ourailleur(self) -> None:
         """Defines the standard deviation of this series.
       """
-        return np.std(self.values)
+        try:
+            return round(np.std(self.values), 4)
+        except:
+            return None
 
     def _ignition(self) -> None:
         """Defines the number of values of this series.
       """
-        return len(self.values)
+        try:
+            return len(self.values)
+        except:
+            return None
 
     def print_series(self) -> None:
         print(f'Nom = {self.name}')
