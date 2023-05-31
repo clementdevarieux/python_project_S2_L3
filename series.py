@@ -90,7 +90,7 @@ class Series:
       """
         if self.values is not None:
             try:
-                return round(np.std(self.values), 4)
+                return round(np.std(int(self.values)), 4)
             except:
                 return None
 
