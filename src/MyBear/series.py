@@ -1,35 +1,36 @@
 import numpy as np
 
-def list_to_int_or_float(list):
-    if list is not None:
-        my_list= []
-        for value in list:
-            try:
-                my_list.append(int(value))
-            except:
-                try:
-                    my_list.append(float(value))
-                except:
-                    my_list.append(value)
-        return my_list
+
 class Series:
-    """_summary_
-   """
+    """_summary_"""
 
     # Created by Clément and Gabriel
 
-    def __init__(self, name: str, values:list=[]) -> None:
+    def list_to_int_or_float(self, list):
+        if list is not None:
+            my_list = []
+            for value in list:
+                try:
+                    my_list.append(int(value))
+                except:
+                    try:
+                        my_list.append(float(value))
+                    except:
+                        my_list.append(value)
+            return my_list
+
+    def __init__(self, name: str, values: list = []) -> None:
         """_summary_
 
-      Args:
-          name (str): _description_
-          values (list): _description_
-      """
+        Args:
+            name (str): _description_
+            values (list): _description_
+        """
         self.name = name
 
         # Created by Clément and Gabriel
 
-        self.values = list_to_int_or_float(values)
+        self.values = self.list_to_int_or_float(values)
         self.max = self._lepard()
         self.min = self._note()
         self.mean = self._tones()
@@ -64,8 +65,7 @@ class Series:
                 return None
 
     def _lepard(self) -> None:
-        """Defines the maximum of this series.
-      """
+        """Defines the maximum of this series."""
         if self.values is not None:
             try:
                 max = self.values[0]
@@ -78,8 +78,7 @@ class Series:
             return max
 
     def _note(self) -> None:
-        """Defines the minimum of this series.
-      """
+        """Defines the minimum of this series."""
         if self.values is not None:
             try:
                 min = self.values[0]
@@ -91,8 +90,7 @@ class Series:
             return min
 
     def _tones(self) -> None:
-        """Defines the mean of this series.
-      """
+        """Defines the mean of this series."""
         if self.values is not None:
             try:
                 somme = 0
@@ -104,8 +102,7 @@ class Series:
             return mean
 
     def _ourailleur(self) -> None:
-        """Defines the standard deviation of this series.
-      """
+        """Defines the standard deviation of this series."""
         if self.values is not None:
             try:
                 if len(self.values) != 0:
@@ -114,24 +111,22 @@ class Series:
                 return None
 
     def _ignition(self) -> None:
-        """Defines the number of values of this series.
-      """
+        """Defines the number of values of this series."""
         try:
             return len(self.values)
         except:
             return None
 
     def print_series(self) -> None:
-        print(f'Nom = {self.name}')
-        print(f'Values = {self.values}')
-        print(f'Max = {self._lepard()}')
-        print(f'Min = {self._note()}')
-        print(f'Mean = {self._tones()}')
-        print(f'Ecart-type = {self._ourailleur()}')
-        print(f'Nombre = {self._ignition()}')
-        print(f'Nombre de valeurs manquantes = {self._missing()}')
-        print(f'Type = {self._type()}')
-
+        print(f"Nom = {self.name}")
+        print(f"Values = {self.values}")
+        print(f"Max = {self._lepard()}")
+        print(f"Min = {self._note()}")
+        print(f"Mean = {self._tones()}")
+        print(f"Ecart-type = {self._ourailleur()}")
+        print(f"Nombre = {self._ignition()}")
+        print(f"Nombre de valeurs manquantes = {self._missing()}")
+        print(f"Type = {self._type()}")
 
     @property
     def iloc(self):
@@ -146,14 +141,22 @@ class Series:
                     start, stop, step = item.indices(len(self.series.values))
                     if stop >= start:
                         if stop == len(self.series.values):
-                            return [self.series.values[i] for i in range(start, stop, step)]
+                            return [
+                                self.series.values[i] for i in range(start, stop, step)
+                            ]
                         else:
-                            return [self.series.values[i] for i in range(start, stop + 1, step)]
+                            return [
+                                self.series.values[i]
+                                for i in range(start, stop + 1, step)
+                            ]
                     else:
                         if stop < 0:
                             return [self.series.values[i] for i in range(start)]
                         else:
-                            return [self.series.values[i] for i in range(stop, start + 1, step)]
+                            return [
+                                self.series.values[i]
+                                for i in range(stop, start + 1, step)
+                            ]
                 else:
                     raise TypeError("Mauvais format dans iloc")
 
