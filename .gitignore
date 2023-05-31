@@ -50,6 +50,7 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
+tests_GBO.py
 
 # Translations
 *.mo
@@ -122,6 +123,7 @@ celerybeat.pid
 # Environments
 .env
 .venv
+projet_python/
 env/
 venv/
 ENV/
