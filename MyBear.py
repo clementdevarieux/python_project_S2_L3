@@ -38,6 +38,7 @@ def main():
     print(f"iloc[a:b] = {value_2}\n")
 
     # Print de la serie
+    print("serie test 1")
     serie_test_1.print_series()
     print("\n")
 
@@ -52,9 +53,11 @@ def main():
     df_series = dataframe.DataFrame(serie_list=serie_list)
 
     # Print des deux dataframes
-    print(f"df_columns_values = {df_columns_values.print_df()}\n")
+    print("_____")
+    print(f"df_columns_values to print = {df_columns_values.print_df()}\n")
+    print("_____")
     print(f"df_series = {df_series.print_df()}\n")
-
+    print("_____")
     # Verifications pour iloc[n, n]
     df_iloc_n_n = df_series.iloc[2, 1]
     print(df_iloc_n_n)

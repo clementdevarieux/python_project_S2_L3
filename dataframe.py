@@ -46,7 +46,7 @@ class DataFrame:
 
     def print_df(self) -> None:
         for serie in self.series:
-            print(serie.print_series())
+            serie.print_series()
             
     def print_df_values(self) -> None:
         for serie in self.series:
