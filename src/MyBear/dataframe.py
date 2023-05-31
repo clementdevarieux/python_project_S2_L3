@@ -1,4 +1,4 @@
-import series
+import src.MyBear.series as series
 from typing import List, Any
 import csv
 import json
