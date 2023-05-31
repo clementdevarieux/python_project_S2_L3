@@ -24,8 +24,6 @@ class DataFrame:
         for serie in self.series:
             name_list.append(serie.name)
             value_list.append([serie._lepard()])
-        print(name_list)
-        print(value_list)
         max_df = DataFrame(name_list, value_list)
         return max_df
 
@@ -113,25 +111,35 @@ def read_csv(path: str,
             if row is not None:
                 for i in range(len(row)):
                     if len(value_list) < len(row):
-                        value_list.append([int(row[i])])
+                        try:
+                            value_list.append([int(row[i])])
+                        except ValueError:
+                            value_list.append([row[i]])
                     else:
-                        value_list[i].append(int(row[i]))
+                        try:
+                            value_list[i].append(int(row[i]))
+                        except ValueError:
+                            value_list[i].append(row[i])
 
-    # print(name_list)
-    # print(value_list)
 
     return DataFrame(column_names=name_list, values=value_list)
 def read_json(path: str):
     name_list=[]
     value_list=[]
-    with open(path) as f:
+    with open(path, encoding='utf-8') as f:
         file = json.load(f)
         for my_dict in file:
             for k, v in my_dict.items():
                 if k not in name_list:
                     name_list.append(k)
-                    value_list.append([int(v)])
+                    try:
+                        value_list.append([int(v)])
+                    except ValueError:
+                        value_list.append([v])
                 elif k in name_list:
                     index = name_list.index(k)
-                    value_list[index].append(int(v))
+                    try:
+                        value_list[index].append(int(v))
+                    except ValueError:
+                        value_list[index].append(v)
     return DataFrame(column_names=name_list, values=value_list)
