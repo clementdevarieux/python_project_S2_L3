@@ -14,7 +14,10 @@ class DataFrame:
             self.series = serie_list
         elif column_names is not None and values is not None:
             for i in range(len(column_names)):
-                self.series.append(series.Series(column_names[i], values[i]))
+                try:
+                    self.series.append(series.Series(column_names[i], values[i]))
+                except IndexError:
+                    self.series.append(series.Series(column_names[i], None))
         else:
             raise ValueError("invalid")
 
