@@ -31,14 +31,15 @@ def main():
 
     # Vérification de la propriété iloc[n]
     value_1 = serie_test_1.iloc[1]
-    print(f"iloc[n] = {value_1}")
+    print(f"iloc[n] = {value_1}\n")
 
     # Vérification de la propriété iloc[a:b]
     value_2 = serie_test_3.iloc[2:4]
-    print(f"iloc[a:b] = {value_2}")
+    print(f"iloc[a:b] = {value_2}\n")
 
     # Print de la serie
     serie_test_1.print_series()
+    print("\n")
 
     # DATAFRAMES:
     # Création d'un dataframe à partir de colonnes et valeurs
@@ -51,32 +52,41 @@ def main():
     df_series = dataframe.DataFrame(serie_list=serie_list)
 
     # Print des deux dataframes
-    print(f"df_columns_values = {df_columns_values.print_df()}")
-    print(f"df_series = {df_series.print_df()}")
+    print(f"df_columns_values = {df_columns_values.print_df()}\n")
+    print(f"df_series = {df_series.print_df()}\n")
 
     # Verifications pour iloc[n, n]
     df_iloc_n_n = df_series.iloc[2, 1]
     print(df_iloc_n_n)
+    print("\n")
 
     # Verifications pour iloc[a:b, n]
+
     df_iloc_a_b_n = df_series.iloc[1:3, 1]
-    print(df_iloc_a_b_n)
+    df_iloc_a_b_n.print_series()
+    print("\n")
 
     # Verifications pour iloc[n, a:b]
     df_iloc_n_a_b = df_series.iloc[4, 1:2]
-    print(df_iloc_n_a_b)
+    df_iloc_n_a_b.print_as_table()
+    print("\n")
 
     # Verifications pour iloc[a:b, x:y]
     df_iloc_a_b_x_y = df_series.iloc[1:3, 0:2]
-    print(df_iloc_a_b_x_y)
+    print(type(df_iloc_a_b_x_y))
+    df_iloc_a_b_x_y.print_as_table()
+    print("\n")
+
 
     # Verification du CSV
     df_csv = dataframe.read_csv("test_csv.csv")
     df_csv.print_df()
+    print("\n")
 
     # Verification du JSON
     df_json = dataframe.read_json("test_json.json")
     df_json.print_df_values()
+    print("\n")
 
     left = dataframe.read_csv("join_test_left.csv")
     right = dataframe.read_csv("join_test_right.csv")

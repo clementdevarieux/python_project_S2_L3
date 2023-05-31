@@ -109,7 +109,12 @@ class DataFrame:
                     # doit retourner une serie contenant les valeurs mentionnées
                     elif isinstance(ligne, slice) and isinstance(colonne, int):
                         serie = self.dataframe.series[colonne]
-                        return serie.iloc[ligne]
+                        name = serie.name
+                        values = serie.iloc[ligne]
+
+                        new_serie = series.Series(name, values)
+
+                        return new_serie
 
                     # cas de figure iloc[n, a:b]
                     # doit retourner un dataframe qui contient une seule ligne et les valeurs mentionnées
@@ -121,7 +126,7 @@ class DataFrame:
                         for serie in self.dataframe.series:
                             if count >= start and count <= stop:
                                 name.append(serie.name)
-                                values.append(serie.iloc[ligne])
+                                values.append([serie.iloc[ligne]])
                             count += 1
                         df = DataFrame(column_names=name, values=values)
                         return df
