@@ -1,5 +1,4 @@
 import numpy as np
-import statistics
 
 def list_to_int_or_float(list):
     if list is not None:
@@ -29,13 +28,6 @@ class Series:
         self.name = name
 
         # Created by Clément and Gabriel
-        if not values:
-            self.values = None
-            self.max = None
-            self.min = None
-            self.mean = None
-            self.std = None
-            self.count = None
 
         self.values = list_to_int_or_float(values)
         self.max = self._lepard()
@@ -43,7 +35,33 @@ class Series:
         self.mean = self._tones()
         self.std = self._ourailleur()
         self.count = self._ignition()
+        self.missing = self._missing()
+        self.type = self._type()
         # max, min, mean, std (ecart-type) et count
+
+    def _missing(self) -> None:
+        count = 0
+        try:
+            for value in self.values:
+                if value is None:
+                    count += 1
+            return count
+        except:
+            return None
+
+    def _type(self) -> None:
+        type_list = []
+        if self.values is not None:
+            try:
+                for value in self.values:
+                    if type(value) not in type_list:
+                        type_list.append(type(value))
+                if len(type_list) == 1:
+                    return type_list[0]
+                else:
+                    raise TypeError
+            except:
+                return None
 
     def _lepard(self) -> None:
         """Defines the maximum of this series.
@@ -90,7 +108,8 @@ class Series:
       """
         if self.values is not None:
             try:
-                return round(np.std(int(self.values)), 4)
+                if len(self.values) != 0:
+                    return round(np.std(self.values), 4)
             except:
                 return None
 
@@ -110,6 +129,8 @@ class Series:
         print(f'Mean = {self._tones()}')
         print(f'Ecart-type = {self._ourailleur()}')
         print(f'Nombre = {self._ignition()}')
+        print(f'Nombre de valeurs manquantes = {self._missing()}')
+        print(f'Type = {self._type()}')
 
 
     @property
