@@ -1,5 +1,5 @@
 import series
-from typing import List, Any
+from typing import List, Any, Dict, Callable
 import csv
 import json
 
@@ -115,6 +115,8 @@ class DataFrame:
         return IlocAccessor(self.values)
 
 
+
+
     def join(self,
             other: "DataFrame",
             left_on: List[str] | str,
@@ -158,7 +160,7 @@ class DataFrame:
             for column in self.series :
                 left_part.append(column.values[left_line_number])
             for right_line_number in range(len(other.series[0].values)) :
-                check = True in [self.series[left_column_names.index(left_on[i])].values[left_line_number] \
+                check = False not in [self.series[left_column_names.index(left_on[i])].values[left_line_number] \
                                 == other.series[right_column_names.index(right_on[i])].values[right_line_number] \
                                 for i in range(len(left_on))]
                 if check :
@@ -191,9 +193,60 @@ class DataFrame:
                         list_of_series[index].values.append(whole_part[index])
         return DataFrame(serie_list = list_of_series)
                         
-                
+    def groupby(self,
+                by: List[str] | str,
+                agg: Dict[str, Callable[List[Any], Any]]
+                ) -> "DataFrame" :
+        if by == [] :
+            raise ValueError
+        if isinstance(by, str) :
+            by = [by]
+        for column in by :
+            if column in agg.keys() :
+                raise ValueError
+        column_names = []
+        agg_columns_names = []
+        for serie in self.series :
+            column_names.append(serie.name)
+            if serie.name in agg.keys() :
+                agg_columns_names.append(serie.name)
+        for column in by :
+            if column not in column_names :
+                raise ValueError
+        for column in agg.keys() :
+            if column not in column_names :
+                raise ValueError
+        keys = []
+        related_values_lists = []
+        for line_number in self.series[0] :
+            by_columns_values = []
+            agg_columns_values = []
+            for serie in self.series :
+                if serie.name in by :
+                    by_columns_values.append(serie.values[line_number])
+                elif serie.name in agg.keys() :
+                    agg_columns_values.append(serie.values[line_number])
+            if by_columns_values in keys :
+                related_values_lists[keys.index(by_columns_values)].append(agg_columns_values)
+            else :
+                keys.append(by_columns_values)
+                related_values_lists.append([agg_columns_values])
+        all_columns = []
+        for column_index in range(len(by)) :
+            AAAAAAAAAAAAAAAAAAAAAAAAAARGH = []
+            for key_values in keys :
+                AAAAAAAAAAAAAAAAAAAAAAAAAARGH.append(key_values[column_index])
+            all_columns.append(AAAAAAAAAAAAAAAAAAAAAAAAAARGH)
+        for column_index in range(len(agg_columns_names)) :
+            AAAAAAAAAAAAAAAAAAAAAAAAAARGH = []
+            for related_values_list in related_values_lists :
+                BBBBBBBBBBBBBBBBBBBBBBBBBBRGH = []
+                for line in related_values_list :
+                    BBBBBBBBBBBBBBBBBBBBBBBBBBRGH.append(line[column_index])
+                AAAAAAAAAAAAAAAAAAAAAAAAAARGH.append(agg[agg_columns_names[column_index]](AAAAAAAAAAAAAAAAAAAAAAAAAARGH))
+        return DataFrame(by + agg_columns_names, all_columns)
+            
                             
-
 
 
 def read_csv(path: str,
