@@ -1,7 +1,17 @@
 import numpy as np
 import statistics
 
-
+def list_to_int_or_float(list):
+    my_list= []
+    for value in list:
+        try:
+            my_list.append(int(value))
+        except:
+            try:
+                my_list.append(float(value))
+            except:
+                my_list.append(value)
+    return my_list
 class Series:
     """_summary_
    """
@@ -15,11 +25,18 @@ class Series:
           name (str): _description_
           values (list): _description_
       """
+        self.name = name
+
         # Created by Clément and Gabriel
         if not values:
-            return
-        self.name = name
-        self.values = values
+            self.values = None
+            self.max = None
+            self.min = None
+            self.mean = None
+            self.std = None
+            self.count = None
+
+        self.values = list_to_int_or_float(values)
         self.max = self._lepard()
         self.min = self._note()
         self.mean = self._tones()
@@ -30,39 +47,59 @@ class Series:
     def _lepard(self) -> None:
         """Defines the maximum of this series.
       """
-        max = self.values[0]
-        for value in self.values:
-            if value > max:
-                max = value
-        return max
+        if len(self.values) != 0:
+            try:
+                max = self.values[0]
+                for value in self.values:
+                    if value > max:
+                        max = value
+            except:
+                return None
+
+            return max
 
     def _note(self) -> None:
         """Defines the minimum of this series.
       """
-        min = self.values[0]
-        for value in self.values:
-            if value < min:
-                min = value
-        return min
+        if len(self.values) != 0:
+            try:
+                min = self.values[0]
+                for value in self.values:
+                    if value < min:
+                        min = value
+            except:
+                return None
+            return min
 
     def _tones(self) -> None:
         """Defines the mean of this series.
       """
-        somme = 0
-        for value in self.values:
-            somme += value
-        mean = round((somme / len(self.values)), 2)
-        return mean
+        if len(self.values) != 0:
+            try:
+                somme = 0
+                for value in self.values:
+                    somme += value
+                mean = round((somme / len(self.values)), 2)
+            except:
+                return None
+            return mean
 
     def _ourailleur(self) -> None:
         """Defines the standard deviation of this series.
       """
-        return np.std(self.values)
+        if len(self.values) != 0:
+            try:
+                return round(np.std(self.values), 4)
+            except:
+                return None
 
     def _ignition(self) -> None:
         """Defines the number of values of this series.
       """
-        return len(self.values)
+        try:
+            return len(self.values)
+        except:
+            return None
 
     def print_series(self) -> None:
         print(f'Nom = {self.name}')
