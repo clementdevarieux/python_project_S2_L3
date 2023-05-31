@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 metadata = {
     'name': 'MyBear',
@@ -8,27 +8,26 @@ metadata = {
 }
 
 install_requires = [
-    'colorama==0.4.6',
-    'exceptiongroup==1.1.1',
-    'iniconfig==2.0.0',
-    'numpy==1.24.3',
-    'packaging==23.1',
-    'pluggy==1.0.0',
-    'pytest==7.3.1',
-    'tomli==2.0.1'
+    'numpy==1.24.3'
 ]
 
-package_data = {
-    'csv_files': ['*.csv'],
-    'json_files': ['*.json']
-}
+# package_data = {
+#     'csv': ['*.csv'],
+#     'json': ['*.json']
+# }
 
 setup(
     **metadata,
     install_requires=install_requires,
-    package_data=package_data,
+    packages=find_packages('src'),
+    package_dir={'': 'src'},
+    # package_data=package_data,
 )
 
 # Ensuite, utiliser ce setup.py pour installer le projet en exécutant la commande
 # python setup.py install , dans le répertoire contenant le fichier setup.py
+
+# 1. set up custom discovery (`find` directive with `include` or `exclude`)
+# 2. use a `src-layout`
+# 3. explicitly set `py_modules` or `packages` with a list of names
 

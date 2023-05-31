@@ -17,10 +17,8 @@
 #                `-...-'
 
 
-import numpy as np
-import test
-import series
-import dataframe
+import src.MyBear.series as series
+import src.MyBear.dataframe as dataframe
 
 def main():
     # SERIES:
@@ -44,7 +42,7 @@ def main():
 
     # DATAFRAMES:
     # Création d'un dataframe à partir de colonnes et valeurs
-    df_columns_values = dataframe.DataFrame(column_names=["test_1", "test2"], values=[[11,21,3,4],[3,4,1,9]])
+    df_columns_values = dataframe.DataFrame(column_names=["test_1", "test2"], values=[[11, 21, 3, 4], [3, 4, 1, 9]])
 
     # Création d'une liste de séries
     serie_list = [serie_test_1, serie_test_2, serie_test_3]
@@ -82,17 +80,17 @@ def main():
 
 
     # Verification du CSV
-    df_csv = dataframe.read_csv("test_csv.csv")
+    df_csv = dataframe.read_csv("../test_csv.csv")
     df_csv.print_df()
     print("\n")
 
     # Verification du JSON
-    df_json = dataframe.read_json("test_json.json")
+    df_json = dataframe.read_json("../test_json.json")
     df_json.print_df_values()
     print("\n")
 
-    left = dataframe.read_csv("join_test_left.csv")
-    right = dataframe.read_csv("join_test_right.csv")
+    left = dataframe.read_csv("../join_test_left.csv")
+    right = dataframe.read_csv("../join_test_right.csv")
     left.print_as_table()
     print("------")
     right.print_as_table()

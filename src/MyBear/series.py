@@ -1,5 +1,5 @@
 import numpy as np
-import statistics
+
 
 def list_to_int_or_float(list):
     if list is not None:
