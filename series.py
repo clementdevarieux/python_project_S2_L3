@@ -114,25 +114,25 @@ class Series:
     @property
     def iloc(self):
         class IlocAccessor:
-            def __init__(self, values):
-                self.values = values
+            def __init__(self, series):
+                self.series = series
 
             def __getitem__(self, item):
                 if isinstance(item, int):
-                    return self.values[item]
+                    return self.series.values[item]
                 elif isinstance(item, slice):
-                    start, stop, step = item.indices(len(self.values))
+                    start, stop, step = item.indices(len(self.series.values))
                     if stop >= start:
-                        if stop == len(self.values):
-                            return [self.values[i] for i in range(start, stop, step)]
+                        if stop == len(self.series.values):
+                            return [self.series.values[i] for i in range(start, stop, step)]
                         else:
-                            return [self.values[i] for i in range(start, stop + 1, step)]
+                            return [self.series.values[i] for i in range(start, stop + 1, step)]
                     else:
                         if stop < 0:
-                            return [self.values[i] for i in range(start)]
+                            return [self.series.values[i] for i in range(start)]
                         else:
-                            return [self.values[i] for i in range(stop, start + 1, step)]
+                            return [self.series.values[i] for i in range(stop, start + 1, step)]
                 else:
                     raise TypeError("Mauvais format dans iloc")
 
-        return IlocAccessor(self.values)
+        return IlocAccessor(self)
