@@ -23,38 +23,60 @@ import series
 import dataframe
 
 def main():
+    # SERIES:
+    # Création de 3 séries pour effectuer des tests dessus
     serie_test_1 = series.Series("Test 1", [1, 2, 3, 4, 5])
     serie_test_2 = series.Series("Test 2", [4, 2, 9, 4, 18])
     serie_test_3 = series.Series("Test 3", [14, 12, 19, 14, 118])
 
+    # Vérification de la propriété iloc[n]
+    value_1 = serie_test_1.iloc[1]
+    print(f"iloc[n] = {value_1}")
+
+    # Vérification de la propriété iloc[a:b]
+    value_2 = serie_test_3.iloc[2:4]
+    print(f"iloc[a:b] = {value_2}")
+
+    # Print de la serie
+    serie_test_1.print_series()
+
+    # DATAFRAMES:
+    # Création d'un dataframe à partir de colonnes et valeurs
+    df_columns_values = dataframe.DataFrame(column_names=["test_1", "test2"], values=[[11,21,3,4],[3,4,1,9]])
+
+    # Création d'une liste de séries
     serie_list = [serie_test_1, serie_test_2, serie_test_3]
-    #
-    # # value_1 = serie_test.iloc[1]
-    # # serie_test.print_series()
-    # # print(f"iloc[1]= {value_1}")
-    # df_test = dataframe.DataFrame(column_names=["test_1", "test2"], values=[[1,2],[3,4]])
-    #
-    # df_test_series = dataframe.DataFrame(serie_list=serie_list)
-    # df_test_series.print_df()
-    # #df = df_test._count()
-    df_test_series = dataframe.DataFrame(serie_list=serie_list)
-    df_test_series.print_df()
-    # #df = df_test._count()
-    df_test_series = dataframe.DataFrame(serie_list=serie_list)
-    df_iloc = df_test_series.iloc[2:4, 1:2]
-    df_iloc.print_df()
-    #df = df_test._count()
-    # df = df_test._max()
-    # df_2 = df_test_series._std()
-    # df_2.print_df()
-    # df.print_df()
-    # df_csv = dataframe.read_csv("test_csv.csv")
-    # df_json = dataframe.read_json("test_json.json")
-    # # print(df)
-    # # df = dataframe.read_csv("test_csv.csv")
-    # df_csv.print_df()
-    # print("json")
-    # df_json.print_df_values()
+
+    # Création d'un dataframe à partir d'une liste de series
+    df_series = dataframe.DataFrame(serie_list=serie_list)
+
+    # Print des deux dataframes
+    print(f"df_columns_values = {df_columns_values.print_df()}")
+    print(f"df_series = {df_series.print_df()}")
+
+    # Verifications pour iloc[n, n]
+    df_iloc_n_n = df_series.iloc[2, 1]
+    print(df_iloc_n_n)
+
+    # Verifications pour iloc[a:b, n]
+    df_iloc_a_b_n = df_series.iloc[1:3, 1]
+    print(df_iloc_a_b_n)
+
+    # Verifications pour iloc[n, a:b]
+    df_iloc_n_a_b = df_series.iloc[4, 1:2]
+    print(df_iloc_n_a_b)
+
+    # Verifications pour iloc[a:b, x:y]
+    df_iloc_a_b_x_y = df_series.iloc[1:3, 0:2]
+    print(df_iloc_a_b_x_y)
+
+    # Verification du CSV
+    df_csv = dataframe.read_csv("test_csv.csv")
+    df_csv.print_df()
+
+    # Verification du JSON
+    df_json = dataframe.read_json("test_json.json")
+    df_json.print_df_values()
 
     left = dataframe.read_csv("join_test_left.csv")
     right = dataframe.read_csv("join_test_right.csv")
@@ -73,7 +95,7 @@ def main():
     print("------")
     patate = left.join(other = right, left_on = "EMPDEPT", right_on = "DEPTNAME", how = "outer")
     patate.print_as_table()
-    
+
 
 
 if __name__ == "__main__" :
