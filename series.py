@@ -2,16 +2,17 @@ import numpy as np
 import statistics
 
 def list_to_int_or_float(list):
-    my_list= []
-    for value in list:
-        try:
-            my_list.append(int(value))
-        except:
+    if list is not None:
+        my_list= []
+        for value in list:
             try:
-                my_list.append(float(value))
+                my_list.append(int(value))
             except:
-                my_list.append(value)
-    return my_list
+                try:
+                    my_list.append(float(value))
+                except:
+                    my_list.append(value)
+        return my_list
 class Series:
     """_summary_
    """
@@ -47,7 +48,7 @@ class Series:
     def _lepard(self) -> None:
         """Defines the maximum of this series.
       """
-        if len(self.values) != 0:
+        if self.values is not None:
             try:
                 max = self.values[0]
                 for value in self.values:
@@ -61,7 +62,7 @@ class Series:
     def _note(self) -> None:
         """Defines the minimum of this series.
       """
-        if len(self.values) != 0:
+        if self.values is not None:
             try:
                 min = self.values[0]
                 for value in self.values:
@@ -74,7 +75,7 @@ class Series:
     def _tones(self) -> None:
         """Defines the mean of this series.
       """
-        if len(self.values) != 0:
+        if self.values is not None:
             try:
                 somme = 0
                 for value in self.values:
@@ -87,7 +88,7 @@ class Series:
     def _ourailleur(self) -> None:
         """Defines the standard deviation of this series.
       """
-        if len(self.values) != 0:
+        if self.values is not None:
             try:
                 return round(np.std(self.values), 4)
             except:
