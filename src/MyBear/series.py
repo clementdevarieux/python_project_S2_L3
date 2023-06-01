@@ -31,11 +31,11 @@ class Series:
         # Created by Clément and Gabriel
 
         self.values = self.list_to_int_or_float(values)
-        self.max = self._lepard()
-        self.min = self._note()
-        self.mean = self._tones()
-        self.std = self._ourailleur()
-        self.count = self._ignition()
+        self.max = self._max()
+        self.min = self._min()
+        self.mean = self._mean()
+        self.std = self._std()
+        self.count = self._count()
         self.missing = self._missing()
         self.type = self._type()
         # max, min, mean, std (ecart-type) et count
@@ -64,7 +64,7 @@ class Series:
             except:
                 return None
 
-    def _lepard(self) -> None:
+    def _max(self) -> None:
         """Defines the maximum of this series."""
         if self.values is not None:
             try:
@@ -77,7 +77,7 @@ class Series:
 
             return max
 
-    def _note(self) -> None:
+    def _min(self) -> None:
         """Defines the minimum of this series."""
         if self.values is not None:
             try:
@@ -89,7 +89,7 @@ class Series:
                 return None
             return min
 
-    def _tones(self) -> None:
+    def _mean(self) -> None:
         """Defines the mean of this series."""
         if self.values is not None:
             try:
@@ -101,7 +101,7 @@ class Series:
                 return None
             return mean
 
-    def _ourailleur(self) -> None:
+    def _std(self) -> None:
         """Defines the standard deviation of this series."""
         if self.values is not None:
             try:
@@ -110,7 +110,7 @@ class Series:
             except:
                 return None
 
-    def _ignition(self) -> None:
+    def _count(self) -> None:
         """Defines the number of values of this series."""
         try:
             return len(self.values)
@@ -120,11 +120,11 @@ class Series:
     def print_series(self) -> None:
         print(f"Nom = {self.name}")
         print(f"Values = {self.values}")
-        print(f"Max = {self._lepard()}")
-        print(f"Min = {self._note()}")
-        print(f"Mean = {self._tones()}")
-        print(f"Ecart-type = {self._ourailleur()}")
-        print(f"Nombre = {self._ignition()}")
+        print(f"Max = {self._max()}")
+        print(f"Min = {self._min()}")
+        print(f"Mean = {self._mean()}")
+        print(f"Ecart-type = {self._std()}")
+        print(f"Nombre = {self._count()}")
         print(f"Nombre de valeurs manquantes = {self._missing()}")
         print(f"Type = {self._type()}")
 

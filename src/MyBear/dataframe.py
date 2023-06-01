@@ -34,7 +34,7 @@ class DataFrame:
         value_list = []
         for serie in self.series:
             name_list.append(serie.name)
-            value_list.append([serie._lepard()])
+            value_list.append([serie._max()])
         max_df = DataFrame(name_list, value_list)
         return max_df
 
@@ -64,7 +64,7 @@ class DataFrame:
         value_list = []
         for serie in self.series:
             name_list.append(serie.name)
-            value_list.append([serie._note()])
+            value_list.append([serie._min()])
         min_df = DataFrame(name_list, value_list)
         return min_df
 
@@ -73,7 +73,7 @@ class DataFrame:
         value_list = []
         for serie in self.series:
             name_list.append(serie.name)
-            value_list.append([serie._tones()])
+            value_list.append([serie._mean()])
         mean_df = DataFrame(name_list, value_list)
         return mean_df
 
@@ -82,7 +82,7 @@ class DataFrame:
         value_list = []
         for serie in self.series:
             name_list.append(serie.name)
-            value_list.append([serie._ourailleur()])
+            value_list.append([serie._std()])
         std_df = DataFrame(name_list, value_list)
         return std_df
 
@@ -91,7 +91,7 @@ class DataFrame:
         value_list = []
         for serie in self.series:
             name_list.append(serie.name)
-            value_list.append([serie._ignition()])
+            value_list.append([serie._count()])
         count_df = DataFrame(name_list, value_list)
         return count_df
 
@@ -258,7 +258,7 @@ class DataFrame:
 
     def groupby(self,
                 by: List[str] | str,
-                agg: Dict[str, Callable[List[Any], Any]]
+                agg: Dict[str, Callable[[List[Any]], Any]]
                 ) -> "DataFrame" :
         if by == [] :
             raise ValueError
