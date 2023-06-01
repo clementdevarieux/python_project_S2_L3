@@ -1,19 +1,17 @@
 [
   {
-    "dzd": "hello",
+    "column1": 1,
     "column2": 2,
-    "column3": 3,
-    "column4": 4
+    "column3": 3
   },
   {
     "column1": 5,
     "column2": 6,
-    "column3": 7,
-    "column4": "another_one"
+    "column3": 7
   },
   {
     "column1": 9,
-    "column2": "test",
+    "column2": 10,
     "column3": 11
   }
 
