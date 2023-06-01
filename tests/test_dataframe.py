@@ -74,3 +74,54 @@ def test_dataframe_i_loc_n_a_b(dataframe):
 
 def test_dataframe_i_loc_x_y_a_b(dataframe):
     assert isinstance(dataframe.iloc[0:1, 0:1], DataFrame) == True
+
+
+@pytest.fixture
+def groupby_dataframe():
+    return read_csv("files/group_by_test.csv")
+
+
+def test_df_groupbby_agg_type(groupby_dataframe):
+    with pytest.raises(TypeError):
+        groupby_dataframe.groupby(by = "fhk", agg = {"gfbb", print})
+
+
+def test_df_groupbby_agg_keys_type(groupby_dataframe):
+    with pytest.raises(TypeError):
+        groupby_dataframe.groupby(by = "fhk", agg = {3 : print})
+
+
+def test_df_groupbby_agg_keys_value(groupby_dataframe):
+    with pytest.raises(ValueError):
+        groupby_dataframe.groupby(by = "fhk", agg = {"gfbb" : print})
+
+
+def test_df_groupbby_by_type(groupby_dataframe):
+    with pytest.raises(TypeError):
+        groupby_dataframe.groupby(by = 3, agg = {"DEPTNAME" : print})
+
+
+def test_df_groupbby_by_value(groupby_dataframe):
+    with pytest.raises(ValueError):
+        groupby_dataframe.groupby(by = "fdhkvbfdkb", agg = {"DEPTNAME" : print})
+
+
+
+    # # Vérification de la méthode groupby
+    # right = dataframe.read_csv("files/group_by_test.csv")
+    # right.print_as_table()
+    # print ("-----")
+    # # agg : TypeError
+    # # right.groupby(by = "fhk", agg = {"gfbb", print})
+    # # agg.keys() : TypeError
+    # # right.groupby(by = "fhk", agg = {3 : print})
+    # # agg.keys() : ValueError
+    # # right.groupby(by = "fhk", agg = {"gfbb" : print})
+    # # by : TypeError
+    # # right.groupby(by = 3, agg = {"DEPTNAME" : print})
+    # # by : ValueError
+    # # right.groupby(by = "fdhkvbfdkb", agg = {"DEPTNAME" : print})
+    # # groupby OK for a single value
+    # # right.groupby(by = "DEPTNAME", agg = {"DEPTID" : max}).print_as_table()
+    # # groupby OK
+    # right.groupby(by = ["DEPTNAME", "LOCATION"], agg = {"DEPTID" : max}).print_as_table()
