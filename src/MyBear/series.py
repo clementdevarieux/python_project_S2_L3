@@ -44,7 +44,7 @@ class Series:
         count = 0
         try:
             for value in self.values:
-                if value is None:
+                if value == '' or value is None:
                     count += 1
             return count
         except:
@@ -138,16 +138,17 @@ class Series:
                 if isinstance(item, int):
                     return self.series.values[item]
                 elif isinstance(item, slice):
-                    start, stop, step = item.indices(len(self.series.values))
+                    # start, stop, step = item.indices(len(self.series.values))
+                    start, stop = item.start, item.stop
                     if stop >= start:
                         if stop == len(self.series.values):
                             return [
-                                self.series.values[i] for i in range(start, stop, step)
+                                self.series.values[i] for i in range(start, stop)
                             ]
                         else:
                             return [
                                 self.series.values[i]
-                                for i in range(start, stop + 1, step)
+                                for i in range(start, stop + 1)
                             ]
                     else:
                         if stop < 0:
@@ -155,7 +156,7 @@ class Series:
                         else:
                             return [
                                 self.series.values[i]
-                                for i in range(stop, start + 1, step)
+                                for i in range(stop, start + 1)
                             ]
                 else:
                     raise TypeError("Mauvais format dans iloc")

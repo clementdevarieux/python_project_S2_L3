@@ -24,6 +24,7 @@ def main():
     serie_test_1 = series.Series("Test 1", ["1", 2, 3, 4, 5])
     serie_test_2 = series.Series("Test 2", [4, 2, "hello", 4, 18])
     serie_test_3 = series.Series("Test 3", [14, 12, 19, 14, "118.927"])
+    serie_test_4 = series.Series("Test 4", [1, None, 7, 8])
 
     # Vérification de la propriété iloc[n]
     value_1 = serie_test_1.iloc[1]
@@ -36,6 +37,11 @@ def main():
     # Print de la serie
     print("serie test 1")
     serie_test_1.print_series()
+    print("\n")
+
+    # Verification de propriété valeur manquante pour série
+    print("serie test 4")
+    serie_test_4.print_series()
     print("\n")
 
     # DATAFRAMES:
