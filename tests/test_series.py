@@ -55,3 +55,12 @@ def test_serie_type(serie):
 )
 def test_serie_list_to_int_or_float(value, expected, serie):
     assert serie.list_to_int_or_float(value) == expected
+
+def test_serie_iloc_n(serie):
+    assert serie.iloc[1] == 2
+
+def test_serie_iloc_a_b(serie):
+    assert serie.iloc[0:2] == [1, 2, 3]
+
+def test_serie_iloc_a_b_out_of_range(serie):
+    assert serie.iloc[0:8] == [1, 2, 3]
