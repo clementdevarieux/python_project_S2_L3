@@ -1,14 +1,20 @@
-import src.MyBear.series as series
+from .series import Series
 from typing import List, Any
 import csv
 import json
 
+
 class DataFrame:
     """
-   summary
-   """
-    def __init__(self, column_names: List[str] = None, values: List[List[Any]] = None,
-                 serie_list: List[series.Series] = None):
+    summary
+    """
+
+    def __init__(
+        self,
+        column_names: List[str] = None,
+        values: List[List[Any]] = None,
+        serie_list: List[Series] = None,
+    ):
         self.series = []
         if serie_list is not None:
             self.series = serie_list
@@ -17,9 +23,9 @@ class DataFrame:
                 raise ValueError("Size of columns and values not the same")
             for i in range(len(column_names)):
                 try:
-                    self.series.append(series.Series(column_names[i], values[i]))
+                    self.series.append(Series(column_names[i], values[i]))
                 except IndexError:
-                    self.series.append(series.Series(column_names[i], None))
+                    self.series.append(Series(column_names[i], None))
         else:
             raise ValueError("invalid")
 
@@ -33,23 +39,22 @@ class DataFrame:
         return max_df
 
     def print_as_table(self) -> None:
-        if not self.series :
+        if not self.series:
             return
         line = ""
         for serie in self.series:
-            line += str(serie.name).ljust(20, ' ')
+            line += str(serie.name).ljust(20, " ")
         print(line)
-        for line_number in range(len(self.series[0].values)) :
+        for line_number in range(len(self.series[0].values)):
             line = ""
             for serie in self.series:
-                line += str(serie.values[line_number]).ljust(25, ' ')
+                line += str(serie.values[line_number]).ljust(25, " ")
             print(line)
-            
 
     def print_df(self) -> None:
         for serie in self.series:
             serie.print_series()
-            
+
     def print_df_values(self) -> None:
         for serie in self.series:
             print(serie.values)
@@ -93,7 +98,7 @@ class DataFrame:
     @property
     def iloc(self):
         # pour info, iloc[a, b] --> a sont les lignes, b les colonnes
-        class IlocAccessor():
+        class IlocAccessor:
             def __init__(self, dataframe):
                 self.dataframe = dataframe
 
@@ -114,7 +119,7 @@ class DataFrame:
                         name = serie.name
                         values = serie.iloc[ligne]
 
-                        new_serie = series.Series(name, values)
+                        new_serie = Series(name, values)
 
                         return new_serie
 
@@ -138,7 +143,11 @@ class DataFrame:
                     elif isinstance(ligne, slice) and isinstance(colonne, slice):
                         name = []
                         values = []
-                        start_col, stop_col, step_col = colonne.start, colonne.stop, colonne.step
+                        start_col, stop_col, step_col = (
+                            colonne.start,
+                            colonne.stop,
+                            colonne.step,
+                        )
                         count = 0
                         for serie in self.dataframe.series:
                             if count >= start_col and count <= stop_col:
@@ -152,92 +161,104 @@ class DataFrame:
 
         return IlocAccessor(self)
 
-
-
-    def join(self,
-            other: "DataFrame",
-            left_on: List[str] | str,
-            right_on: List[str] | str,
-            how: str = "left"
-            ) -> "DataFrame" :
-        if how not in ["left", "outer", "right", "inner"] :
+    def join(
+        self,
+        other: "DataFrame",
+        left_on: List[str] | str,
+        right_on: List[str] | str,
+        how: str = "left",
+    ) -> "DataFrame":
+        if how not in ["left", "outer", "right", "inner"]:
             raise ValueError
         outer_on_left = how in ["left", "outer"]
         outer_on_right = how in ["right", "outer"]
-        if isinstance(left_on, List) ^ isinstance(right_on, List) :
+        if isinstance(left_on, List) ^ isinstance(right_on, List):
             raise TypeError
-        if not isinstance(left_on, List) :
+        if not isinstance(left_on, List):
             left_on = [left_on]
             right_on = [right_on]
-        if len(left_on) == 0 or len(right_on) == 0 or len(left_on) != len(right_on) :
+        if len(left_on) == 0 or len(right_on) == 0 or len(left_on) != len(right_on):
             raise ValueError
         left_column_names = [syrie.name for syrie in self.series]
         right_column_names = [syrie.name for syrie in other.series]
-        for column_name in left_on :
-            if column_name not in left_column_names :
+        for column_name in left_on:
+            if column_name not in left_column_names:
                 raise ValueError
-        for column_name in right_on :
-            if column_name not in right_column_names :
+        for column_name in right_on:
+            if column_name not in right_column_names:
                 raise ValueError
         list_of_names = []
         list_of_series = []
-        for column_name in left_column_names :
-            column_to_append_name = column_name if column_name not in left_on or column_name == right_on[left_on.index(column_name)] \
-                                                else column_name + '|' + right_on[left_on.index(column_name)]
+        for column_name in left_column_names:
+            column_to_append_name = (
+                column_name
+                if column_name not in left_on
+                or column_name == right_on[left_on.index(column_name)]
+                else column_name + "|" + right_on[left_on.index(column_name)]
+            )
             list_of_names.append(column_to_append_name)
-            list_of_series.append(series.Series(name = column_to_append_name, values = []))
-        for column_name in right_column_names :
-            if column_name not in right_on :
+            list_of_series.append(Series(name=column_to_append_name, values=[]))
+        for column_name in right_column_names:
+            if column_name not in right_on:
                 list_of_names.append(column_name)
-                list_of_series.append(series.Series(name = column_name, values = []))
-        
-        for left_line_number in range(len(self.series[0].values)) :
+                list_of_series.append(Series(name=column_name, values=[]))
+
+        for left_line_number in range(len(self.series[0].values)):
             left_part = []
             is_there_a_match_in_right = False
-            for column in self.series :
+            for column in self.series:
                 left_part.append(column.values[left_line_number])
-            for right_line_number in range(len(other.series[0].values)) :
-                check = True in [self.series[left_column_names.index(left_on[i])].values[left_line_number] \
-                                == other.series[right_column_names.index(right_on[i])].values[right_line_number] \
-                                for i in range(len(left_on))]
-                if check :
+            for right_line_number in range(len(other.series[0].values)):
+                check = True in [
+                    self.series[left_column_names.index(left_on[i])].values[
+                        left_line_number
+                    ]
+                    == other.series[right_column_names.index(right_on[i])].values[
+                        right_line_number
+                    ]
+                    for i in range(len(left_on))
+                ]
+                if check:
                     is_there_a_match_in_right = True
                     right_part = []
-                    for column in other.series :
-                        if column.name not in right_on :
+                    for column in other.series:
+                        if column.name not in right_on:
                             right_part.append(column.values[right_line_number])
                     whole_part = left_part + right_part
-                    for index in range(len(whole_part)) :
+                    for index in range(len(whole_part)):
                         list_of_series[index].values.append(whole_part[index])
-            if outer_on_left and not is_there_a_match_in_right :
-                whole_part = left_part + [None] * (len(right_column_names) - len (right_on))
-                for index in range(len(whole_part)) :
+            if outer_on_left and not is_there_a_match_in_right:
+                whole_part = left_part + [None] * (
+                    len(right_column_names) - len(right_on)
+                )
+                for index in range(len(whole_part)):
                     list_of_series[index].values.append(whole_part[index])
-        if outer_on_right :
-            for right_line_number in range(len(other.series[0].values)) :
+        if outer_on_right:
+            for right_line_number in range(len(other.series[0].values)):
                 is_there_a_match_in_left = False
-                for left_line_number in range(len(self.series[0].values)) :
-                    check = True in [self.series[left_column_names.index(left_on[i])].values[left_line_number] \
-                                    == other.series[right_column_names.index(right_on[i])].values[right_line_number] \
-                                    for i in range(len(left_on))]
-                    if check :
+                for left_line_number in range(len(self.series[0].values)):
+                    check = True in [
+                        self.series[left_column_names.index(left_on[i])].values[
+                            left_line_number
+                        ]
+                        == other.series[right_column_names.index(right_on[i])].values[
+                            right_line_number
+                        ]
+                        for i in range(len(left_on))
+                    ]
+                    if check:
                         is_there_a_match_in_left = True
-                if not is_there_a_match_in_left :
-                    whole_part = [None] * (len(left_column_names) - len (right_on))
-                    for column in other.series :
+                if not is_there_a_match_in_left:
+                    whole_part = [None] * (len(left_column_names) - len(right_on))
+                    for column in other.series:
                         whole_part.append(column.values[right_line_number])
-                    for index in range(len(whole_part)) :
+                    for index in range(len(whole_part)):
                         list_of_series[index].values.append(whole_part[index])
-        return DataFrame(serie_list = list_of_series)
-                        
-                
-                            
+        return DataFrame(serie_list=list_of_series)
 
 
-
-def read_csv(path: str,
-             delimiter: str = ","):
-    with open(path, newline='') as csvfile:
+def read_csv(path: str, delimiter: str = ","):
+    with open(path, newline="") as csvfile:
         value_list = []
         spamreader = csv.reader(csvfile, delimiter=delimiter)
         row = next(spamreader, None)
@@ -257,12 +278,13 @@ def read_csv(path: str,
                         except ValueError:
                             value_list[i].append(row[i])
 
-
     return DataFrame(column_names=name_list, values=value_list)
+
+
 def read_json(path: str):
-    name_list=[]
-    value_list=[]
-    with open(path, encoding='utf-8') as f:
+    name_list = []
+    value_list = []
+    with open(path, encoding="utf-8") as f:
         file = json.load(f)
         for my_dict in file:
             for k, v in my_dict.items():
