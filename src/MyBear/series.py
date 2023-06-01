@@ -138,26 +138,26 @@ class Series:
                 if isinstance(item, int):
                     return self.series.values[item]
                 elif isinstance(item, slice):
-                    # start, stop, step = item.indices(len(self.series.values))
                     start, stop = item.start, item.stop
+                    new_serie = []
                     if stop >= start:
                         if stop == len(self.series.values):
-                            return [
-                                self.series.values[i] for i in range(start, stop)
-                            ]
+                            for i in range(start, stop):
+                                new_serie.append(self.series.values[i])
+                            return new_serie
                         else:
-                            return [
-                                self.series.values[i]
-                                for i in range(start, stop + 1)
-                            ]
+                            for i in range(start, stop + 1):
+                                new_serie.append(self.series.values[i])
+                            return new_serie
                     else:
                         if stop < 0:
-                            return [self.series.values[i] for i in range(start)]
+                            for i in range(start):
+                                new_serie.append(self.series.values[i])
+                            return new_serie
                         else:
-                            return [
-                                self.series.values[i]
-                                for i in range(stop, start + 1)
-                            ]
+                            for i in range(stop, start + 1):
+                                new_serie.append(self.series.values[i])
+                            return new_serie
                 else:
                     raise TypeError("Mauvais format dans iloc")
 
