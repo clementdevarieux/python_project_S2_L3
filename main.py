@@ -17,15 +17,16 @@
 #                `-...-'
 
 
-import src.MyBear.series as series
-import src.MyBear.dataframe as dataframe
+from src.MyBear import dataframe, series
+
 
 def main():
     # SERIES:
     # Création de 3 séries pour effectuer des tests dessus
-    serie_test_1 = series.Series("Test 1", [1, 2, 3, 4, 5])
-    serie_test_2 = series.Series("Test 2", [4, 2, 9, 4, 18])
-    serie_test_3 = series.Series("Test 3", [14, 12, 19, 14, 118])
+    serie_test_1 = series.Series("Test 1", ["1", 2, 3, 4, 5])
+    serie_test_2 = series.Series("Test 2", [4, 2, "hello", 4, 18])
+    serie_test_3 = series.Series("Test 3", [14, 12, 19, 14, "118.927"])
+    serie_test_4 = series.Series("Test 4", [1, None, 7, 8])
 
     # Vérification de la propriété iloc[n]
     value_1 = serie_test_1.iloc[1]
@@ -40,9 +41,16 @@ def main():
     serie_test_1.print_series()
     print("\n")
 
+    # Verification de propriété valeur manquante pour série
+    print("serie test 4")
+    serie_test_4.print_series()
+    print("\n")
+
     # DATAFRAMES:
     # Création d'un dataframe à partir de colonnes et valeurs
-    df_columns_values = dataframe.DataFrame(column_names=["test_1", "test2"], values=[[], [3, 4, 1, 9]])
+    df_columns_values = dataframe.DataFrame(
+        column_names=["test_1", "test2"], values=[[11, 21, 3, 4], [3, -4, 1, 9]]
+    )
 
     # Création d'une liste de séries
     serie_list = [serie_test_1, serie_test_2, serie_test_3]
@@ -78,38 +86,34 @@ def main():
     df_iloc_a_b_x_y.print_as_table()
     print("\n")
 
-
     # Verification du CSV
-    df_csv = dataframe.read_csv("test_csv.csv")
+    df_csv = dataframe.read_csv("files/test_csv.csv")
     df_csv.print_df()
     print("\n")
 
     # Verification du JSON
-    df_json = dataframe.read_json("test_json.json")
+    df_json = dataframe.read_json("files/test_json.json")
     df_json.print_df_values()
     print("\n")
 
-    left = dataframe.read_csv("join_test_left.csv")
-    right = dataframe.read_csv("join_test_right.csv")
+    left = dataframe.read_csv("files/join_test_left.csv")
+    right = dataframe.read_csv("files/join_test_right.csv")
     left.print_as_table()
     print("------")
     right.print_as_table()
     print("------")
-    patate = left.join(other = right, left_on = "EMPDEPT", right_on = "DEPTNAME", how = "inner")
+    patate = left.join(other=right, left_on="EMPDEPT", right_on="DEPTNAME", how="inner")
     patate.print_as_table()
     print("------")
-    patate = left.join(other = right, left_on = "EMPDEPT", right_on = "DEPTNAME", how = "left")
+    patate = left.join(other=right, left_on="EMPDEPT", right_on="DEPTNAME", how="left")
     patate.print_as_table()
     print("------")
-    patate = left.join(other = right, left_on = "EMPDEPT", right_on = "DEPTNAME", how = "right")
+    patate = left.join(other=right, left_on="EMPDEPT", right_on="DEPTNAME", how="right")
     patate.print_as_table()
     print("------")
-    patate = left.join(other = right, left_on = "EMPDEPT", right_on = "DEPTNAME", how = "outer")
+    patate = left.join(other=right, left_on="EMPDEPT", right_on="DEPTNAME", how="outer")
     patate.print_as_table()
 
 
-
-if __name__ == "__main__" :
+if __name__ == "__main__":
     main()
-
-

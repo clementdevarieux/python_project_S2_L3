@@ -13,6 +13,8 @@ class DataFrame:
         if serie_list is not None:
             self.series = serie_list
         elif column_names is not None and values is not None:
+            if len(column_names) != len(values):
+                raise ValueError("Size of columns and values not the same")
             for i in range(len(column_names)):
                 try:
                     self.series.append(series.Series(column_names[i], values[i]))
