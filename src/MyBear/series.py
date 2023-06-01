@@ -145,19 +145,16 @@ class Series:
                             for i in range(start, stop):
                                 new_serie.append(self.series.values[i])
                             return new_serie
-                        else:
+                        elif stop > len(self.series.values):
+                            for i in range(start, len(self.series.values)):
+                                new_serie.append(self.series.values[i])
+                            return new_serie
+                        else :
                             for i in range(start, stop + 1):
                                 new_serie.append(self.series.values[i])
                             return new_serie
                     else:
-                        if stop < 0:
-                            for i in range(start):
-                                new_serie.append(self.series.values[i])
-                            return new_serie
-                        else:
-                            for i in range(stop, start + 1):
-                                new_serie.append(self.series.values[i])
-                            return new_serie
+                        raise ValueError("mauvais ordre")
                 else:
                     raise TypeError("Mauvais format dans iloc")
 
