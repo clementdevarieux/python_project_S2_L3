@@ -5,9 +5,6 @@ import json
 
 
 class DataFrame:
-    """
-    summary
-    """
 
     def __init__(
         self,
@@ -38,7 +35,7 @@ class DataFrame:
         else:
             raise ValueError("invalid")
 
-    def _max(self):
+    def _max(self) -> "DataFrame":
         """
         Calcule et retourne la valeur maximale de chaque série du Dataframe.
 
@@ -83,7 +80,7 @@ class DataFrame:
         for serie in self.series:
             print(serie.values)
 
-    def _min(self):
+    def _min(self) -> "DataFrame":
         """
         Calcule et retourne la valeur minimale de chaque série du Dataframe.
 
@@ -98,7 +95,7 @@ class DataFrame:
         min_df = DataFrame(name_list, value_list)
         return min_df
 
-    def _mean(self):
+    def _mean(self) -> "DataFrame":
         name_list = []
         value_list = []
         for serie in self.series:
@@ -107,7 +104,7 @@ class DataFrame:
         mean_df = DataFrame(name_list, value_list)
         return mean_df
 
-    def _std(self):
+    def _std(self) -> "DataFrame":
         """
         Calcule et retourne l'écart-type de chaque série du Dataframe.
 
@@ -122,7 +119,7 @@ class DataFrame:
         std_df = DataFrame(name_list, value_list)
         return std_df
 
-    def _count(self):
+    def _count(self) -> "DataFrame":
         """
         Calcule et retourne le nombre d'éléments de chaque série du Dataframe.
 
@@ -415,7 +412,7 @@ class DataFrame:
         return DataFrame(by + agg_columns_names, all_columns)
 
 
-def read_csv(path: str, delimiter: str = ","):
+def read_csv(path: str, delimiter: str = ",") -> "DataFrame":
     """
     Charge les données d'un fichier CSV dans un DataFrame.
 
@@ -449,7 +446,7 @@ def read_csv(path: str, delimiter: str = ","):
     return DataFrame(column_names=name_list, values=value_list)
 
 
-def read_json(path: str, orient: str = "columns"):
+def read_json(path: str, orient: str = "columns") -> "DataFrame":
     """
     Charge les données d'un fichier JSON dans un DataFrame.
 
