@@ -5,16 +5,21 @@ import json
 
 
 class DataFrame:
-    """
-    summary
-    """
-
     def __init__(
         self,
         column_names: List[str] = None,
         values: List[List[Any]] = None,
         serie_list: List[Series] = None,
     ):
+        """
+        Initialise une instance de la classe DataFrame.
+        Possibilité d'initialiser avec une combinaison nom de colonnes / valeurs associées, ou en entrant une liste de séries.
+
+        Args:
+            column_names: Liste des noms de colonnes du DataFrame.
+            values: Liste de liste de valeurs des colonnes nommées précédemment
+            serie_list: Liste de séries
+        """
         self.series = []
         if serie_list is not None:
             self.series = serie_list
@@ -30,6 +35,12 @@ class DataFrame:
             raise ValueError("invalid")
 
     def _max(self):
+        """
+        Calcule et retourne la valeur maximale de chaque série du Dataframe.
+
+        Returns:
+            Nouveau Dataframe contenant le max de chacune de ses séries.
+        """
         name_list = []
         value_list = []
         for serie in self.series:
@@ -39,6 +50,9 @@ class DataFrame:
         return max_df
 
     def print_as_table(self) -> None:
+        """
+        Affiche le contenu du DataFrame sous forme de tableau.
+        """
         if not self.series:
             return
         line = ""
@@ -52,14 +66,26 @@ class DataFrame:
             print(line)
 
     def print_df(self) -> None:
+        """
+        Affiche le contenu du DataFrame sous forme de séries, en donnant les détails de chaque séries.
+        """
         for serie in self.series:
             serie.print_series()
 
     def print_df_values(self) -> None:
+        """
+        Affiche les valeurs des séries contenues dans le dataframe.
+        """
         for serie in self.series:
             print(serie.values)
 
     def _min(self):
+        """
+        Calcule et retourne la valeur minimale de chaque série du Dataframe.
+
+        Returns:
+            Nouveau Dataframe contenant le min de chacune de ses séries.
+        """
         name_list = []
         value_list = []
         for serie in self.series:
@@ -78,6 +104,12 @@ class DataFrame:
         return mean_df
 
     def _std(self):
+        """
+        Calcule et retourne l'écart-type de chaque série du Dataframe.
+
+        Returns:
+            Nouveau Dataframe contenant l'écart-type de chacune de ses séries.
+        """
         name_list = []
         value_list = []
         for serie in self.series:
@@ -87,6 +119,12 @@ class DataFrame:
         return std_df
 
     def _count(self):
+        """
+        Calcule et retourne le nombre d'éléments de chaque série du Dataframe.
+
+        Returns:
+            Nouveau Dataframe contenant le nombre d'éléments de chacune de ses séries.
+        """
         name_list = []
         value_list = []
         for serie in self.series:
@@ -97,7 +135,26 @@ class DataFrame:
 
     @property
     def iloc(self):
-        # pour info, iloc[a, b] --> a sont les lignes, b les colonnes
+        """
+        Accès aux valeurs d'un dataframe selon différents critères.
+
+        Args:
+            index: Position ou plage de positions des valeurs à accéder.
+
+        Returns:
+            cas de figure iloc[n, m] : retourne un seul élément, de la ligne n et colonne m
+            cas de figure iloc[a:b, n] : retourne une serie contenant les valeurs mentionnées
+            cas de figure iloc[n, a:b] : retourne un dataframe qui contient une seule ligne et les valeurs mentionnées
+            cas de figure iloc[x:y, a:b] : retourne un dataframe avec les lignes et les colonnes mentionnées
+
+
+        Raises:
+            - TypeError si le format d'entrée d'iloc n'est pas bon.
+
+        Notes:
+            - iloc[a, b] --> a sont les lignes, b les colonnes
+        """
+
         class IlocAccessor:
             def __init__(self, dataframe):
                 self.dataframe = dataframe
@@ -106,14 +163,10 @@ class DataFrame:
                 if isinstance(item, tuple):
                     ligne, colonne = item
 
-                    # cas de figure iloc[n, m]
-                    # doit renvoyer un seul élément, de la ligne n et colonne m
                     if isinstance(ligne, int) and isinstance(colonne, int):
                         serie = self.dataframe.series[colonne]
                         return serie.iloc[ligne]
 
-                    # cas de figure iloc[a:b, n]
-                    # doit retourner une serie contenant les valeurs mentionnées
                     elif isinstance(ligne, slice) and isinstance(colonne, int):
                         serie = self.dataframe.series[colonne]
                         name = serie.name
@@ -123,8 +176,6 @@ class DataFrame:
 
                         return new_serie
 
-                    # cas de figure iloc[n, a:b]
-                    # doit retourner un dataframe qui contient une seule ligne et les valeurs mentionnées
                     elif isinstance(ligne, int) and isinstance(colonne, slice):
                         name = []
                         values = []
@@ -138,8 +189,6 @@ class DataFrame:
                         df = DataFrame(column_names=name, values=values)
                         return df
 
-                    # cas de figure iloc[x:y, a:b]
-                    # retourne un dataframe avec les lignes et les colonnes mentionnées
                     elif isinstance(ligne, slice) and isinstance(colonne, slice):
                         name = []
                         values = []
@@ -168,6 +217,30 @@ class DataFrame:
         right_on: List[str] | str,
         how: str = "left",
     ) -> "DataFrame":
+        """
+        Effectue une jointure entre deux DataFrames.
+
+        Args:
+            left_df: DataFrame de gauche.
+            right_df: DataFrame de droite.
+            left_on: Nom de la colonne ou liste de noms de colonnes à utiliser pour la jointure du DataFrame de gauche (par défaut: None).
+            right_on: Nom de la colonne ou liste de noms de colonnes à utiliser pour la jointure du DataFrame de droite (par défaut: None).
+            how: Type de jointure à effectuer. Les valeurs possibles sont 'inner' (par défaut), 'outer', 'left' et 'right'.
+
+        Returns:
+            DataFrame résultant de la jointure.
+
+        Raises:
+            ValueError: Si les colonnes spécifiées pour la jointure ne sont pas présentes dans les DataFrames.
+
+        Notes:
+            - Si les arguments `left_on` et `right_on` ne sont pas spécifiés, la jointure sera effectuée en utilisant toutes les colonnes avec des noms identiques dans les DataFrames de gauche et de droite.
+            - Les types de jointures disponibles sont les suivants:
+                - 'inner': Retourne uniquement les enregistrements ayant des correspondances dans les deux DataFrames.
+                - 'outer': Retourne tous les enregistrements de chaque DataFrame, combinés là où il y a une correspondance et avec des valeurs manquantes (NaN) là où il n'y a pas de correspondance.
+                - 'left': Retourne tous les enregistrements du DataFrame de gauche et les enregistrements correspondants du DataFrame de droite, avec des valeurs manquantes (NaN) là où il n'y a pas de correspondance.
+                - 'right': Retourne tous les enregistrements du DataFrame de droite et les enregistrements correspondants du DataFrame de gauche, avec des valeurs manquantes (NaN) là où il n'y a pas de correspondance.
+        """
         if how not in ["left", "outer", "right", "inner"]:
             raise ValueError
         outer_on_left = how in ["left", "outer"]
@@ -259,7 +332,17 @@ class DataFrame:
     def groupby(self,
                 by: List[str] | str,
                 agg: Dict[str, Callable[[List[Any]], Any]]
-                ) -> "DataFrame" :
+                ) -> "DataFrame":
+        """
+        Regroupe les données du DataFrame en fonction des colonnes spécifiées et applique des fonctions d'agrégation.
+
+        Args:
+            by: Liste des colonnes à utiliser pour le regroupement.
+            agg: Dictionnaire des fonctions d'agrégation à appliquer aux autres colonnes.
+
+        Returns:
+            DataFrame contenant les résultats du regroupement et de l'agrégation.
+        """
         if by == [] :
             raise ValueError
         if isinstance(by, str) :
@@ -318,9 +401,18 @@ class DataFrame:
             all_columns.append(column_values)
         return DataFrame(by + agg_columns_names, all_columns)
             
-                            
 
 def read_csv(path: str, delimiter: str = ","):
+    """
+    Charge les données d'un fichier CSV dans un DataFrame.
+
+    Args:
+        path: Chemin du fichier CSV à charger.
+        delimiter: Délimiteur utilisé dans le fichier CSV (par défaut: ',').
+
+    Returns:
+        DataFrame contenant les données du fichier CSV.
+    """
     with open(path, newline="") as csvfile:
         value_list = []
         spamreader = csv.reader(csvfile, delimiter=delimiter)
@@ -345,6 +437,15 @@ def read_csv(path: str, delimiter: str = ","):
 
 
 def read_json(path: str):
+    """
+    Charge les données d'un fichier JSON dans un DataFrame.
+
+    Args:
+        file_path: Chemin du fichier JSON à charger.
+
+    Returns:
+        DataFrame contenant les données du fichier JSON.
+    """
     name_list = []
     value_list = []
     with open(path, encoding="utf-8") as f:

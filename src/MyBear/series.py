@@ -2,11 +2,19 @@ import numpy as np
 
 
 class Series:
-    """_summary_"""
-
     # Created by Clément and Gabriel
 
     def list_to_int_or_float(self, list):
+        """
+        Convertit les éléments d'une liste en entiers ou en flottants.
+
+        Args:
+            data_list: Liste contenant les données à convertir.
+
+        Returns:
+            Liste contenant les éléments convertis en entiers ou en flottants.
+
+        """
         if list is not None:
             my_list = []
             for value in list:
@@ -20,11 +28,11 @@ class Series:
             return my_list
 
     def __init__(self, name: str, values: list = []) -> None:
-        """_summary_
+        """
+          Initialise une instance de la classe Series avec les données spécifiées.
 
-        Args:
-            name (str): _description_
-            values (list): _description_
+          Args:
+              data: Nom de la série, et liste des valeurs de la série.
         """
         self.name = name
 
@@ -41,6 +49,13 @@ class Series:
         # max, min, mean, std (ecart-type) et count
 
     def _missing(self) -> None:
+        """
+            Indique le nombre de valeurs manquantes dans la série
+
+            Return:
+                Nombre de valeur vides de la série.
+
+        """
         count = 0
         try:
             for value in self.values:
@@ -51,6 +66,13 @@ class Series:
             return None
 
     def _type(self) -> None:
+        """
+            Indique le type des données présentes dans la série, si elles sont toutes de même nature.
+            Au cas contraire, raise un TypeError
+
+            Returns:
+                Type des valeurs de la série
+        """
         type_list = []
         if self.values is not None:
             try:
@@ -65,7 +87,12 @@ class Series:
                 return None
 
     def _max(self) -> None:
-        """Defines the maximum of this series."""
+        """
+        Calcule et retourne la valeur maximale de la série.
+
+        Returns:
+            Valeur maximale de la série.
+        """
         if self.values is not None:
             try:
                 max = self.values[0]
@@ -78,7 +105,12 @@ class Series:
             return max
 
     def _min(self) -> None:
-        """Defines the minimum of this series."""
+        """
+        Calcule et retourne la valeur minimale de la série.
+
+        Returns:
+            Valeur minimale de la série.
+        """
         if self.values is not None:
             try:
                 min = self.values[0]
@@ -90,7 +122,12 @@ class Series:
             return min
 
     def _mean(self) -> None:
-        """Defines the mean of this series."""
+        """
+        Calcule et retourne la moyenne des valeurs de la série.
+
+        Returns:
+            Moyenne des valeurs de la série.
+        """
         if self.values is not None:
             try:
                 somme = 0
@@ -102,7 +139,12 @@ class Series:
             return mean
 
     def _std(self) -> None:
-        """Defines the standard deviation of this series."""
+        """
+        Calcule et retourne l'écart-type des valeurs de la série.
+
+        Returns:
+            Écart-type des valeurs de la série.
+        """
         if self.values is not None:
             try:
                 if len(self.values) != 0:
@@ -111,13 +153,21 @@ class Series:
                 return None
 
     def _count(self) -> None:
-        """Defines the number of values of this series."""
+        """
+        Calcule et retourne le nombre total de valeurs dans la série.
+
+        Returns:
+            Nombre total de valeurs dans la série.
+        """
         try:
             return len(self.values)
         except:
             return None
 
     def print_series(self) -> None:
+        """
+        Affiche les informations de la série, y compris les valeurs et le nombre de valeurs manquantes.
+        """
         print(f"Nom = {self.name}")
         print(f"Values = {self.values}")
         print(f"Max = {self._max()}")
@@ -130,13 +180,38 @@ class Series:
 
     @property
     def iloc(self):
+        """
+        Accès aux valeurs d'une série par position.
+
+        Args:
+            index: Position ou plage de positions des valeurs à accéder.
+
+        Returns:
+            - Si l'index est un entier, retourne la valeur correspondante à cette position.
+            - Si l'index est une plage de positions (slice), retourne une nouvelle série contenant les valeurs incluses dans cette plage.
+
+        Raises:
+            - TypeError si le format d'entrée d'iloc n'est pas bon.
+
+        Notes:
+            - Les positions des valeurs dans une série commencent à zéro.
+            - L'index peut être un entier ou une plage de positions.
+            - Si l'index spécifié est en dehors de la plage valide des positions lors d'un slice, cela retournera le slice entre le start, et le dernier élément de la série.
+            - Si l'index spécifié est en dehors de la plage valide des positions lors d'un slice, cela retournera le slice entre le start, et le dernier élément de la série.
+            - La méthode iloc ne modifie pas la série d'origine.
+        """
         class IlocAccessor:
             def __init__(self, series):
                 self.series = series
 
             def __getitem__(self, item):
                 if isinstance(item, int):
-                    return self.series.values[item]
+                    if item > len(self.series.values):
+                        return self.series.values[len(self.series.values)-1]
+                    elif item < 0:
+                        return self.series.values[0]
+                    else:
+                        return self.series.values[item]
                 elif isinstance(item, slice):
                     start, stop = item.start, item.stop
                     new_serie = []

@@ -27,7 +27,7 @@ def main():
     serie_test_4 = series.Series("Test 4", [1, None, 7, 8])
 
     # Vérification de la propriété iloc[n]
-    value_1 = serie_test_1.iloc[1]
+    value_1 = serie_test_1.iloc[-2]
     print(f"iloc[n] = {value_1}\n")
 
     # Vérification de la propriété iloc[a:b]
