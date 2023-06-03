@@ -1,18 +1,5 @@
-[
-  {
-    "column1": 1,
-    "column2": 2,
-    "column3": 3
-  },
-  {
-    "column1": 5,
-    "column2": 6,
-    "column3": 7
-  },
-  {
-    "column1": 9,
-    "column2": 10,
-    "column3": 11
-  }
-
-]
+{
+  "column1": [1,5,"string_test"],
+  "column2": [2,6,10],
+  "column3": [3,7,11]
+}

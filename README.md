@@ -6,9 +6,9 @@ MyBear est une librairie Python qui vise à reproduire certaines fonctionnalité
 ## Installation
 Pour installer MyBear, vous pouvez utiliser pip :
 
-> pip setup.py bdist_wheel sdist
+> python setup.py bdist_wheel sdist
 > 
-> pip install
+> pip install .
 > 
 > pip freeze (pour s'assurer de la bonne installation)
 
@@ -53,9 +53,11 @@ Créez un DataFrame à partir d'une liste de séries :
 
 >df_series = DataFrame(serie_list=[serie_test_1, serie_test_2, serie_test_3])
 
-Vous pouvez afficher le contenu d'un DataFrame en utilisant la méthode print_df() :
+Vous pouvez afficher le contenu d'un DataFrame en utilisant la méthode print_df() ou print_as_table() (sous la forme de tableau) :
 
 >df_columns_values.print_df()
+> 
+>df_columns_values.print_as_table()
 
 Vous pouvez accéder aux éléments d'un DataFrame en utilisant la méthode iloc[n, n] pour un élément spécifique, ou iloc[a:b, n], iloc[n, a:b], iloc[a:b, x:y] pour des tranches d'éléments :
 
@@ -72,9 +74,11 @@ Vous pouvez lire des données à partir d'un fichier CSV en utilisant la fonctio
 
 >df_csv = read_csv("chemin/vers/le/fichier.csv")
 
-Vous pouvez lire des données à partir d'un fichier JSON en utilisant la fonction read_json() :
+Vous pouvez lire des données à partir d'un fichier JSON en utilisant la fonction read_json() avec orient par default à "columns" et la possibilité de mettre "records" comme valeur :
 
 > df_json = read_json("chemin/vers/le/fichier.json")
+> 
+> df_json = read_json("chemin/vers/le/fichier.json", orient="records")
 
 ## Jointure de DataFrames
 La méthode join() permet de fusionner deux DataFrames :
@@ -86,6 +90,22 @@ La méthode join() permet de fusionner deux DataFrames :
 >result = left.join(other=right, left_on="colonne_gauche", right_on="colonne_droite", how="inner")
 
 Vous pouvez spécifier le type de jointure en utilisant le paramètre how avec les valeurs "inner", "left", "right" ou "outer".
+
+## Test avec Pytest
+Pour lancer la commande de tests unitaire mis en place:
+>pytest
+
+## Requirements.txt
+Afin de pouvoir lancer les scripts vous devez installer l'ensemble des librairies du requirements.txt.
+
+Pour ce faire on commence par créer son venv:
+>python -m venv venv
+
+Aller ensuite dans son venv:
+>venv\Script\activate
+
+On installe les librairies avec:
+>pip install -r requirements.txt
 
 ## Groupement de données
 La méthode groupby() permet de regrouper les données d'un DataFrame et d'appliquer des fonctions d'agrégation :

@@ -5,6 +5,10 @@ import json
 
 
 class DataFrame:
+    """
+    summary
+    """
+
     def __init__(
         self,
         column_names: List[str] = None,
@@ -333,10 +337,9 @@ class DataFrame:
                         list_of_series[index].values.append(whole_part[index])
         return DataFrame(serie_list=list_of_series)
 
-    def groupby(self,
-                by: List[str] | str,
-                agg: Dict[str, Callable[[List[Any]], Any]]
-                ) -> "DataFrame":
+    def groupby(
+        self, by: List[str] | str, agg: Dict[str, Callable[[List[Any]], Any]]
+    ) -> "DataFrame":
         """
         Regroupe les données du DataFrame en fonction des colonnes spécifiées et applique des fonctions d'agrégation.
 
@@ -347,64 +350,70 @@ class DataFrame:
         Returns:
             DataFrame contenant les résultats du regroupement et de l'aggrégation.
         """
-        if by == [] :
+        if by == []:
             raise ValueError
-        if isinstance(by, str) :
+        if isinstance(by, str):
             by = [by]
-        if not isinstance(by, List) :
+        if not isinstance(by, List):
             raise TypeError
-        if not isinstance(agg, Dict) :
+        if not isinstance(agg, Dict):
             raise TypeError
-        for key, value in agg.items() :
-            if not isinstance(key, str) or not isinstance(value, Callable) :
+        for key, value in agg.items():
+            if not isinstance(key, str) or not isinstance(value, Callable):
                 raise TypeError
         column_names = []
         agg_columns_names = []
-        for serie in self.series :
+        for serie in self.series:
             column_names.append(serie.name)
-            if serie.name in agg.keys() :
+            if serie.name in agg.keys():
                 agg_columns_names.append(serie.name)
-        if len(agg.keys()) != len (agg_columns_names) :
+        if len(agg.keys()) != len(agg_columns_names):
             raise ValueError
-        for column in by :
-            if column not in column_names :
+        for column in by:
+            if column not in column_names:
                 raise ValueError
-            if column in agg.keys() :
+            if column in agg.keys():
                 raise ValueError
-        for column in agg.values() :
-            if not isinstance(column, Callable) :
+        for column in agg.values():
+            if not isinstance(column, Callable):
                 raise TypeError
         keys = []
         related_values_lists = []
-        for line_number in range(len(self.series[0].values)) :
+        for line_number in range(len(self.series[0].values)):
             by_columns_values = []
             agg_columns_values = []
-            for serie in self.series :
-                if serie.name in by :
+            for serie in self.series:
+                if serie.name in by:
                     by_columns_values.append(serie.values[line_number])
-                elif serie.name in agg.keys() :
+                elif serie.name in agg.keys():
                     agg_columns_values.append(serie.values[line_number])
-            if by_columns_values in keys :
-                related_values_lists[keys.index(by_columns_values)].append(agg_columns_values)
-            else :
+            if by_columns_values in keys:
+                related_values_lists[keys.index(by_columns_values)].append(
+                    agg_columns_values
+                )
+            else:
                 keys.append(by_columns_values)
                 related_values_lists.append([agg_columns_values])
         all_columns = []
-        for column_index in range(len(by)) :
+        for column_index in range(len(by)):
             column_values = []
-            for key_values in keys :
+            for key_values in keys:
                 column_values.append(key_values[column_index])
             all_columns.append(column_values)
-        for column_index in range(len(agg_columns_names)) :
+        for column_index in range(len(agg_columns_names)):
             column_values = []
-            for related_values_list in related_values_lists :
+            for related_values_list in related_values_lists:
                 column_values_to_aggregate_into_one = []
-                for line in related_values_list :
+                for line in related_values_list:
                     column_values_to_aggregate_into_one.append(line[column_index])
-                column_values.append(agg[agg_columns_names[column_index]](column_values_to_aggregate_into_one))
+                column_values.append(
+                    agg[agg_columns_names[column_index]](
+                        column_values_to_aggregate_into_one
+                    )
+                )
             all_columns.append(column_values)
         return DataFrame(by + agg_columns_names, all_columns)
-            
+
 
 def read_csv(path: str, delimiter: str = ","):
     """
@@ -440,12 +449,13 @@ def read_csv(path: str, delimiter: str = ","):
     return DataFrame(column_names=name_list, values=value_list)
 
 
-def read_json(path: str):
+def read_json(path: str, orient: str = "columns"):
     """
     Charge les données d'un fichier JSON dans un DataFrame.
 
     Args:
         file_path: Chemin du fichier JSON à charger.
+        orient: Précise le format du JSON (par défaut: "columns")
 
     Returns:
         DataFrame contenant les données du fichier JSON.
@@ -454,18 +464,33 @@ def read_json(path: str):
     value_list = []
     with open(path, encoding="utf-8") as f:
         file = json.load(f)
-        for my_dict in file:
-            for k, v in my_dict.items():
-                if k not in name_list:
-                    name_list.append(k)
+        if orient == "records":
+            for my_dict in file:
+                for k, v in my_dict.items():
+                    if k not in name_list:
+                        name_list.append(k)
+                        try:
+                            value_list.append([int(v)])
+                        except ValueError:
+                            value_list.append([v])
+                    elif k in name_list:
+                        index = name_list.index(k)
+                        try:
+                            value_list[index].append(int(v))
+                        except ValueError:
+                            value_list[index].append(v)
+            return DataFrame(column_names=name_list, values=value_list)
+
+        elif orient == "columns":
+            name_list = []
+            value_list = []
+            for k, v in file.items():
+                records_list = []
+                for i in range(len(v)):
                     try:
-                        value_list.append([int(v)])
+                        records_list.append(int(v[i]))
                     except ValueError:
-                        value_list.append([v])
-                elif k in name_list:
-                    index = name_list.index(k)
-                    try:
-                        value_list[index].append(int(v))
-                    except ValueError:
-                        value_list[index].append(v)
-    return DataFrame(column_names=name_list, values=value_list)
+                        records_list.append(v[i])
+                value_list.append(records_list)
+                name_list.append(k)
+            return DataFrame(column_names=name_list, values=value_list)

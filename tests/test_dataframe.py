@@ -30,6 +30,11 @@ def test_read_json_to_df():
     assert isinstance(df_json, DataFrame) == True
 
 
+def test_read_json_records_to_df():
+    df_json = read_json("files/test_json_records.json", orient="records")
+    assert isinstance(df_json, DataFrame) == True
+
+
 def test_df_max(dataframe):
     df_max = dataframe._max()
     assert isinstance(df_max, DataFrame) == True
