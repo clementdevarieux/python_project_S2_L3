@@ -90,7 +90,6 @@ def main():
     print("\n")
 
     # Verification du JSON
-    print("jsoooooooooooooooooon")
     df_json = dataframe.read_json("files/test_json_records.json", orient="records")
     df_json.print_df()
     df_json.print_as_table()

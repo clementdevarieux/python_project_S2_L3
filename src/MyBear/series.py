@@ -2,9 +2,7 @@ import numpy as np
 
 
 class Series:
-    # Created by Clément and Gabriel
-
-    def list_to_int_or_float(self, list):
+    def list_to_int_or_float(self, list) -> list:
         """
         Convertit les éléments d'une liste en entiers ou en flottants.
 
@@ -29,14 +27,12 @@ class Series:
 
     def __init__(self, name: str, values: list = []) -> None:
         """
-          Initialise une instance de la classe Series avec les données spécifiées.
+        Initialise une instance de la classe Series avec les données spécifiées.
 
-          Args:
-              data: Nom de la série, et liste des valeurs de la série.
+        Args:
+            data: Nom de la série, et liste des valeurs de la série.
         """
         self.name = name
-
-        # Created by Clément and Gabriel
 
         self.values = self.list_to_int_or_float(values)
         self.max = self._max()
@@ -48,30 +44,30 @@ class Series:
         self.type = self._type()
         # max, min, mean, std (ecart-type) et count
 
-    def _missing(self) -> None:
+    def _missing(self) -> int:
         """
-            Indique le nombre de valeurs manquantes dans la série
+        Indique le nombre de valeurs manquantes dans la série
 
-            Return:
-                Nombre de valeur vides de la série.
+        Return:
+            Nombre de valeur vides de la série.
 
         """
         count = 0
         try:
             for value in self.values:
-                if value == '' or value is None:
+                if value == "" or value is None:
                     count += 1
             return count
         except:
             return None
 
-    def _type(self) -> None:
+    def _type(self) -> type:
         """
-            Indique le type des données présentes dans la série, si elles sont toutes de même nature.
-            Au cas contraire, raise un TypeError
+        Indique le type des données présentes dans la série, si elles sont toutes de même nature.
+        Au cas contraire, raise un TypeError
 
-            Returns:
-                Type des valeurs de la série
+        Returns:
+            Type des valeurs de la série
         """
         type_list = []
         if self.values is not None:
@@ -86,7 +82,7 @@ class Series:
             except:
                 return None
 
-    def _max(self) -> None:
+    def _max(self) -> int | float:
         """
         Calcule et retourne la valeur maximale de la série.
 
@@ -104,7 +100,7 @@ class Series:
 
             return max
 
-    def _min(self) -> None:
+    def _min(self) -> int | float:
         """
         Calcule et retourne la valeur minimale de la série.
 
@@ -121,7 +117,7 @@ class Series:
                 return None
             return min
 
-    def _mean(self) -> None:
+    def _mean(self) -> int | float:
         """
         Calcule et retourne la moyenne des valeurs de la série.
 
@@ -138,7 +134,7 @@ class Series:
                 return None
             return mean
 
-    def _std(self) -> None:
+    def _std(self) -> int | float:
         """
         Calcule et retourne l'écart-type des valeurs de la série.
 
@@ -152,7 +148,7 @@ class Series:
             except:
                 return None
 
-    def _count(self) -> None:
+    def _count(self) -> int:
         """
         Calcule et retourne le nombre total de valeurs dans la série.
 
@@ -200,6 +196,7 @@ class Series:
             - Si l'index spécifié est en dehors de la plage valide des positions lors d'un slice, cela retournera le slice entre le start, et le dernier élément de la série.
             - La méthode iloc ne modifie pas la série d'origine.
         """
+
         class IlocAccessor:
             def __init__(self, series):
                 self.series = series
@@ -207,7 +204,7 @@ class Series:
             def __getitem__(self, item):
                 if isinstance(item, int):
                     if item > len(self.series.values):
-                        return self.series.values[len(self.series.values)-1]
+                        return self.series.values[len(self.series.values) - 1]
                     elif item < 0:
                         return self.series.values[0]
                     else:
@@ -224,7 +221,7 @@ class Series:
                             for i in range(start, len(self.series.values)):
                                 new_serie.append(self.series.values[i])
                             return new_serie
-                        else :
+                        else:
                             for i in range(start, stop + 1):
                                 new_serie.append(self.series.values[i])
                             return new_serie
