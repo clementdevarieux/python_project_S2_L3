@@ -106,22 +106,42 @@ def test_df_groupbby_by_value(groupby_dataframe):
         groupby_dataframe.groupby(by = "fdhkvbfdkb", agg = {"DEPTNAME" : print})
 
 
+@pytest.fixture
+def join_left_dataframe():
+    return read_csv("files/join_test_left.csv")
 
-    # # Vérification de la méthode groupby
-    # right = dataframe.read_csv("files/group_by_test.csv")
-    # right.print_as_table()
-    # print ("-----")
-    # # agg : TypeError
-    # # right.groupby(by = "fhk", agg = {"gfbb", print})
-    # # agg.keys() : TypeError
-    # # right.groupby(by = "fhk", agg = {3 : print})
-    # # agg.keys() : ValueError
-    # # right.groupby(by = "fhk", agg = {"gfbb" : print})
-    # # by : TypeError
-    # # right.groupby(by = 3, agg = {"DEPTNAME" : print})
-    # # by : ValueError
-    # # right.groupby(by = "fdhkvbfdkb", agg = {"DEPTNAME" : print})
-    # # groupby OK for a single value
-    # # right.groupby(by = "DEPTNAME", agg = {"DEPTID" : max}).print_as_table()
-    # # groupby OK
-    # right.groupby(by = ["DEPTNAME", "LOCATION"], agg = {"DEPTID" : max}).print_as_table()
+
+@pytest.fixture
+def join_right_dataframe():
+    return read_csv("files/join_test_right.csv")
+
+
+def test_df_join_how_value(join_left_dataframe, join_right_dataframe):
+    with pytest.raises(ValueError):
+        join_left_dataframe.join(join_right_dataframe, left_on = "EMPDEPT", right_on = "DEPTNAME", how = "")
+
+
+def test_df_join_left_right_type(join_left_dataframe, join_right_dataframe):
+    with pytest.raises(TypeError):
+        join_left_dataframe.join(join_right_dataframe, left_on = ["EMPDEPT"], right_on = "DEPTNAME", how = "inner")
+
+
+def test_df_join_left_length_value(join_left_dataframe, join_right_dataframe):
+    with pytest.raises(ValueError):
+        join_left_dataframe.join(join_right_dataframe, left_on = [], right_on = [], how = "inner")
+
+
+def test_df_join_left_right_length_value(join_left_dataframe, join_right_dataframe):
+    with pytest.raises(ValueError):
+        join_left_dataframe.join(join_right_dataframe, left_on = ["EMPDEPT", "EMPID"], right_on = ["DEPTNAME"], how = "inner")
+
+
+def test_df_join_left_on_value(join_left_dataframe, join_right_dataframe):
+    with pytest.raises(ValueError):
+        join_left_dataframe.join(join_right_dataframe, left_on = ["fghxghfsgcbnxh"], right_on = ["DEPTNAME"], how = "inner")
+
+
+def test_df_join_right_on_value(join_left_dataframe, join_right_dataframe):
+    with pytest.raises(ValueError):
+        join_left_dataframe.join(join_right_dataframe, left_on = ["EMPDEPT"], right_on = ["dgfssghdfgfhs"], how = "inner")
+

@@ -223,23 +223,27 @@ class DataFrame:
         Args:
             left_df: DataFrame de gauche.
             right_df: DataFrame de droite.
-            left_on: Nom de la colonne ou liste de noms de colonnes à utiliser pour la jointure du DataFrame de gauche (par défaut: None).
-            right_on: Nom de la colonne ou liste de noms de colonnes à utiliser pour la jointure du DataFrame de droite (par défaut: None).
-            how: Type de jointure à effectuer. Les valeurs possibles sont 'inner' (par défaut), 'outer', 'left' et 'right'.
+            left_on: Nom de la colonne ou liste de noms de colonnes à utiliser pour la jointure du DataFrame de gauche.
+            right_on: Nom de la colonne ou liste de noms de colonnes à utiliser pour la jointure du DataFrame de droite.
+            how: Type de jointure à effectuer. Les valeurs possibles sont 'left' (par défaut), 'inner', 'outer' et 'right'.
 
         Returns:
             DataFrame résultant de la jointure.
 
         Raises:
-            ValueError: Si les colonnes spécifiées pour la jointure ne sont pas présentes dans les DataFrames.
+            ValueError : Si les colonnes spécifiées pour la jointure ne sont pas présentes dans les DataFrames, n'ont pas
+                         le même nombre de colonnes ou si le type de jointure n'est pas cohérent.
+            TypeError : Si les collonnes n'ont pas le même type.
 
         Notes:
-            - Si les arguments `left_on` et `right_on` ne sont pas spécifiés, la jointure sera effectuée en utilisant toutes les colonnes avec des noms identiques dans les DataFrames de gauche et de droite.
             - Les types de jointures disponibles sont les suivants:
                 - 'inner': Retourne uniquement les enregistrements ayant des correspondances dans les deux DataFrames.
-                - 'outer': Retourne tous les enregistrements de chaque DataFrame, combinés là où il y a une correspondance et avec des valeurs manquantes (NaN) là où il n'y a pas de correspondance.
-                - 'left': Retourne tous les enregistrements du DataFrame de gauche et les enregistrements correspondants du DataFrame de droite, avec des valeurs manquantes (NaN) là où il n'y a pas de correspondance.
-                - 'right': Retourne tous les enregistrements du DataFrame de droite et les enregistrements correspondants du DataFrame de gauche, avec des valeurs manquantes (NaN) là où il n'y a pas de correspondance.
+                - 'outer': Retourne tous les enregistrements de chaque DataFrame, combinés là où il y a une correspondance 
+                           et avec des valeurs manquantes (NaN) là où il n'y a pas de correspondance.
+                - 'left': Retourne tous les enregistrements du DataFrame de gauche et les enregistrements correspondants du 
+                          DataFrame de droite, avec des valeurs manquantes (NaN) là où il n'y a pas de correspondance.
+                - 'right': Retourne tous les enregistrements du DataFrame de droite et les enregistrements correspondants 
+                           du DataFrame de gauche, avec des valeurs manquantes (NaN) là où il n'y a pas de correspondance.
         """
         if how not in ["left", "outer", "right", "inner"]:
             raise ValueError
@@ -338,10 +342,10 @@ class DataFrame:
 
         Args:
             by: Liste des colonnes à utiliser pour le regroupement.
-            agg: Dictionnaire des fonctions d'agrégation à appliquer aux autres colonnes.
+            agg: Dictionnaire des colonnes à aggréger et fonctions d'agrégation à appliquer à chacune.
 
         Returns:
-            DataFrame contenant les résultats du regroupement et de l'agrégation.
+            DataFrame contenant les résultats du regroupement et de l'aggrégation.
         """
         if by == [] :
             raise ValueError
